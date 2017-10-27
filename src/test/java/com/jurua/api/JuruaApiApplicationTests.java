@@ -12,37 +12,11 @@ import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 public class JuruaApiApplicationTests {
-
-	@Test
-	public void contextLoads() {
-	}
-
-    //@Test
-    //public void t() {
-		////Objects.equals("", "");
-    //    BASE64Encoder base64Encoder = new BASE64Encoder();
-    //    System.out.println(base64Encoder.encode("{\"typ\": \"JWT\",\"alg\": \"HS256\"}".getBytes()));
-    //
-    //    BASE64Decoder base64Decoder = new BASE64Decoder();
-    //    try {
-    //        System.out.println(new String(base64Decoder.decodeBuffer("rSWamyAYwuHCo7IFAgd1oRpSP7nzL7BF5t7ItqpKViM")));
-    //    } catch (IOException e) {
-    //        e.printStackTrace();
-    //    }
-    //}
 
     @Test
     public void createJWT() {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
-        //ECPrivateKey ecPrivateKey;
-        //try {
-        //     ecPrivateKey = new ECPrivateKeyImpl("woshinibabanishiwoerzi".getBytes());
-        //} catch (InvalidKeyException e) {
-        //    e.printStackTrace();
-        //}
         Date now = new Date();
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("woshinibabanishiwoerzi");
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
