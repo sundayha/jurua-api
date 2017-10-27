@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jurua.api.user.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.jurua.api.user.model.User">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
+    <result column="user_state" jdbcType="BIT" property="userState" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jurua.api.user.model.User">
+    insert into user (user_id, user_name, user_password, 
+      person_name, email, phone_num, 
+      ip_address, is_user_state)
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
+      #{personName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, 
+      #{ipAddress,jdbcType=VARCHAR}, #{userState,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.jurua.api.user.model.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      person_name = #{personName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      ip_address = #{ipAddress,jdbcType=VARCHAR},
+      is_user_state = #{userState,jdbcType=BIT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select user_id, user_name, user_password, person_name, email, phone_num, ip_address, 
+    is_user_state
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select user_id, user_name, user_password, person_name, email, phone_num, ip_address, 
+    is_user_state
+    from user
+  </select>
+</mapper>
