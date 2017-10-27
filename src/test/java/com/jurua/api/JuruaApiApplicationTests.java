@@ -91,15 +91,4 @@ public class JuruaApiApplicationTests {
         System.out.println(format.format(datea));
         System.out.println(date.before(datea));
     }
-
-    @Test
-    public void getIf() {
-	    Boolean a = false;
-	    if (a) {
-            System.out.println("a");
-        } else {
-            System.out.println("b");
-        }
-        System.out.println("c");
-    }
 }
