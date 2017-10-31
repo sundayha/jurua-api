@@ -3,7 +3,8 @@ package com.jurua.api.config.security;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 //@Configuration
 //@EnableWebSecurity

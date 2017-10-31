@@ -1,7 +1,8 @@
 package com.jurua.api.common.constants;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 public enum StatusCode {
 

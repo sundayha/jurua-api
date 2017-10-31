@@ -26,10 +26,11 @@ import java.util.UUID;
 
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 @Controller
-@RequestMapping(value = "/TestController")
+@RequestMapping(value = "/jurua/TestController")
 @Api(value = "测试controller", description = "测试测试")
 public class TestController {
 
@@ -86,7 +87,7 @@ public class TestController {
         try {
             String s = (String) redisTemplate.opsForValue().get(String.valueOf(httpServletRequest.getAttribute("uuid")));
             System.out.println(s);
-            ResultApi<PagingResult<Test>> resultApi = new ResultApi<>();
+            ResultApi<PagingResult<Test, TestQuery>> resultApi = new ResultApi<>();
             resultApi.setData(iTestService.findTestById(pagingInfo));
             resultApi.setMessage(StatusCode.COMMON_OK.getMessage());
             resultApi.setStatusCode(StatusCode.COMMON_OK.getCode());
@@ -105,7 +106,6 @@ public class TestController {
         try {
             String uuid = UUID.randomUUID().toString();
             jwtTokenUtil.generateToken(new HashMap<>(0), uuid, httpServletRequest, httpServletResponse);
-            //System.out.println(user.getUsername());
             return new ResultApi();
         } catch (Exception e) {
             e.printStackTrace();

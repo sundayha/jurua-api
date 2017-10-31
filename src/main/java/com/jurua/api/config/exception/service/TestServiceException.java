@@ -1,7 +1,8 @@
 package com.jurua.api.config.exception.service;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 public class TestServiceException extends Exception {
 

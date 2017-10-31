@@ -14,7 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 @Service
 public class TestServiceImpl implements ITestService {
@@ -47,9 +48,9 @@ public class TestServiceImpl implements ITestService {
     }
 
     @Override
-    public PagingResult<Test>  findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException {
+    public PagingResult<Test, TestQuery>  findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException {
         try {
-            PagingResult<Test> pagingResult;
+            PagingResult<Test, TestQuery> pagingResult;
             PageHelper.startPage(pagingInfo.getCurrent(), pagingInfo.getPageSize());
             pagingResult = BeanUtil.toPagedResultMybatis(testMapper.selectById(pagingInfo), pagingInfo);
             return pagingResult;

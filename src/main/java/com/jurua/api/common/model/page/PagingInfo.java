@@ -5,9 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-
+/**
+ * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 分页信息
+ */
 @JsonIgnoreProperties(value = {"offset"})
-public class PagingInfo<T> implements Serializable {
+public class PagingInfo<E> implements Serializable {
     private static final long serialVersionUID = 699898315263998732L;
     @ApiModelProperty(value = "分页查询，当前要查询的页码")
     private Integer current = 1;
@@ -17,8 +21,8 @@ public class PagingInfo<T> implements Serializable {
     private Long total = 0L;
     @ApiModelProperty(value = "分页查询，查询结果的总页数")
     private Integer totalPages = 0;
-    @ApiModelProperty(value = "分页查询，查询条件所需封装的bean")
-    private T query;
+    @ApiModelProperty(value = "分页查询，查询条件所需封装的model")
+    private E query;
     @ApiModelProperty(value = "需要排序的字段")
     private String sortField;
     @ApiModelProperty(value = "需要排序的方式")
@@ -56,11 +60,11 @@ public class PagingInfo<T> implements Serializable {
         this.totalPages = totalPages;
     }
 
-    public T getQuery() {
+    public E getQuery() {
         return query;
     }
 
-    public void setQuery(T query) {
+    public void setQuery(E query) {
         this.query = query;
     }
 

@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 @ApiModel("测试表查询条件")
 public class TestQuery implements Serializable {

@@ -1,5 +1,9 @@
 package com.jurua.api.test.model;
 
+/**
+ * @author 张博【zhangb@lianliantech.cn】
+ *
+ */
 public class Test {
     private Long id;
 
