@@ -14,10 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static com.jurua.api.common.constants.Constants.BEARER;
-import static com.jurua.api.common.constants.Constants.TOKEN_BLACK_LIST;
-import static com.jurua.api.common.constants.Constants.UUID;
 import static com.jurua.api.common.constants.StatusCode.FILTER_OK;
+import static com.jurua.api.common.constants.SysConstants.*;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
@@ -38,6 +36,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 从header中得到授权token
         String requestHeader = request.getHeader(authorization);
+        String apiPath = jwtTokenUtil.getApiPath(request);
+        if (StringUtils.contains(apiPath, LOGIN) || StringUtils.contains(SWAGGER_URL, apiPath)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 登陆用户唯一标识（登录时生成）
         String uuid;
         // 认证令牌
