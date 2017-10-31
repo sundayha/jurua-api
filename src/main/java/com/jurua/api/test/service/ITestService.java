@@ -8,7 +8,8 @@ import com.jurua.api.test.model.User;
 import com.jurua.api.test.model.query.TestQuery;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 public interface ITestService {
 
@@ -21,7 +22,7 @@ public interface ITestService {
 
     Integer insertTest(Test test) throws TestServiceException;
 
-    PagingResult<Test> findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException;
+    PagingResult<Test, TestQuery> findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException;
 
     User getUser(String userName) throws TestServiceException;
 }

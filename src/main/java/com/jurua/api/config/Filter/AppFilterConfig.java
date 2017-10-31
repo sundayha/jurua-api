@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import javax.servlet.Filter;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 @Configuration
 public class AppFilterConfig {
@@ -30,14 +31,10 @@ public class AppFilterConfig {
      */
     @Bean
     public FilterRegistrationBean FilterRegistration() {
-        //Map<String, String> initParameters = new HashMap<>(1);
-        //initParameters.put("urls", "/v2/api-docs,/configuration/ui,/swagger-resources/**,/configuration/**,/swagger-ui.html,/webjars/**");
-        //initParameters.put("urls", "/swagger-ui.html,/webjars/*,/swagger-resources,/configuration/*,/v2/api-docs,/images/*,*");
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(jwtAuthenticationTokenFilter());
         registration.addUrlPatterns("/*");
         registration.setName("jwtAuthenticationTokenFilter");
-        //registration.setInitParameters(initParameters);
         return registration;
     }
 }

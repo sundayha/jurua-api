@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Properties;
 
 /**
- * 创建人：张博
+ * @author 张博【zhangb@lianliantech.cn】
+ *
  */
 @Configuration
 @MapperScan(basePackages = "com.jurua.api.*.mapper", sqlSessionFactoryRef = "sqlSessionFactory", sqlSessionTemplateRef = "sqlSessionTemplate")

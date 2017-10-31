@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static com.jurua.api.common.constants.Constants.*;
+import static com.jurua.api.common.constants.SysConstants.*;
 import static com.jurua.api.common.constants.StatusCode.COMMON_OK;
 import static com.jurua.api.common.constants.StatusCode.FILTER_OK;
 
@@ -36,7 +36,6 @@ import static com.jurua.api.common.constants.StatusCode.FILTER_OK;
  */
 @Component
 public class JwtTokenUtil {
-
     @Value("${jwt.apiKey}")
     private String apiKey;
     @Value("${jwt.exp}")
@@ -310,6 +309,16 @@ public class JwtTokenUtil {
 
     /**
      * 创建人：张博【zhangb@lianliantech.cn】
+     * 时间：2017/10/30 上午10:38
+     * @param request 请求对象
+     * @apiNote 得到当前api地址
+     */
+    public String getApiPath(HttpServletRequest request) {
+        return request.getRequestURI().substring(request.getContextPath().length());
+    }
+
+    /**
+     * 创建人：张博【zhangb@lianliantech.cn】
      * 时间：2017/10/24 下午5:55
      * @param request 请求对象
      * @param token 登出时，要被放进令牌黑名单里的令牌
@@ -317,9 +326,9 @@ public class JwtTokenUtil {
      */
     protected StatusCode aboutPath(HttpServletRequest request, String token) {
         // 得到api资源地址
-        String api = request.getRequestURI().substring(request.getContextPath().length());
+        String apiPath = getApiPath(request);
         // 如果是登出
-        if (StringUtils.contains(api, LOG_OUT)) {
+        if (StringUtils.contains(apiPath, LOG_OUT)) {
             // 删除redis中与登陆信息相关的key-value
             redisTemplate.delete(getUuidFromToken(token));
             // 然后把该令牌加入令牌黑名单
@@ -330,5 +339,6 @@ public class JwtTokenUtil {
             //responseResult(response, TEST);
             return FILTER_OK;
         }
+         //&& StringUtils.contains(apiPath, "jurua")
     }
 }

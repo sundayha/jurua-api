@@ -6,11 +6,16 @@ import com.jurua.api.common.model.page.PagingResult;
 
 import java.util.List;
 
+/**
+ * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 整合分页结果
+ */
 public class BeanUtil {
-    public static PagingResult toPagedResultMybatis(List data, PagingInfo pageInfo) {
-        PagingResult pageResult = new PagingResult<>();
+    public static <T, E> PagingResult <T, E> toPagedResultMybatis(List<T> data, PagingInfo<E> pageInfo) {
+        PagingResult<T, E> pageResult = new PagingResult<>();
         if (data instanceof Page) {
-            Page page = (Page) data;
+            Page<T> page = (Page<T>) data;
             if (page.getPageNum() != 0) {
                 pageInfo.setCurrent(page.getPageNum());
             }

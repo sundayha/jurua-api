@@ -8,6 +8,10 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author 张博【zhangb@lianliantech.cn】
+ *
+ */
 public interface TestMapper {
     int deleteByPrimaryKey(Long id);
 

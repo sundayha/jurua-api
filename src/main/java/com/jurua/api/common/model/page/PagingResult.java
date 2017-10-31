@@ -6,15 +6,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by admin on 2016/8/18.
+ * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 分页结果
  */
-
-public class PagingResult<T> implements Serializable {
+public class PagingResult<T, E> implements Serializable {
     private static final long serialVersionUID = -4451791256461165445L;
     @ApiModelProperty(value = "分页查询，返回的结果集合")
-    private List<T> list;//数据
+    private List<T> list;
     @ApiModelProperty(value = "分页查询，返回的分页查询条件")
-    private PagingInfo<T> page;
+    private PagingInfo<E> page;
 
     public List<T> getList() {
         return list;
@@ -24,11 +25,11 @@ public class PagingResult<T> implements Serializable {
         this.list = list;
     }
 
-    public PagingInfo<T> getPage() {
+    public PagingInfo<E> getPage() {
         return page;
     }
 
-    public void setPage(PagingInfo<T> page) {
+    public void setPage(PagingInfo<E> page) {
         this.page = page;
     }
 }
