@@ -37,7 +37,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 从header中得到授权token
         String requestHeader = request.getHeader(authorization);
         String apiPath = jwtTokenUtil.getApiPath(request);
-
         if (StringUtils.contains(apiPath, LOGIN) || StringUtils.contains(SWAGGER_URL, apiPath) || apiPath.matches(SWAGGER_RESOURCES_REGEX)) {
             filterChain.doFilter(request, response);
             return;
