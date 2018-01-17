@@ -15,6 +15,11 @@ public class SysConstants {
      * swagger2的url
      */
     public final static String SWAGGER_URL = "/swagger-ui.html, /swagger-resources/configuration/ui, /swagger-resources, /v2/api-docs, /swagger-resources/configuration/security";
+
+    /**
+     *  swagger2的html中请求资源，js css等
+     */
+    public final static String SWAGGER_RESOURCES_REGEX = "/webjars.*$";
     /**
      * 登出path
      */

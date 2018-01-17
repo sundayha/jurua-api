@@ -37,7 +37,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 从header中得到授权token
         String requestHeader = request.getHeader(authorization);
         String apiPath = jwtTokenUtil.getApiPath(request);
-        if (StringUtils.contains(apiPath, LOGIN) || StringUtils.contains(SWAGGER_URL, apiPath)) {
+        if (StringUtils.contains(apiPath, LOGIN) || StringUtils.contains(SWAGGER_URL, apiPath) || apiPath.matches(SWAGGER_RESOURCES_REGEX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -78,7 +78,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             jwtTokenUtil.refreshToken(new HashMap<>(0), uuid, token, request, response);
             // 通过request可以得到当前的uuid，然后去redis取相应的对象进行操作
             request.setAttribute(UUID, uuid);
-        } else {
+        }
+        else {
             jwtTokenUtil.responseResult(response, StatusCode.TOKEN_INVALID);
             return;
         }
