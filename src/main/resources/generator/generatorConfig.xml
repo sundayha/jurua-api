@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-  <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+  <context id="Mysql" targetRuntime="MyBatis3">
   <!--<context id="Mysql" defaultModelType="flat">-->
     <commentGenerator>
       <property name="suppressAllComments" value="true" />
@@ -32,10 +32,11 @@
     <javaClientGenerator type="XMLMAPPER" targetPackage="${mapperPackage}" targetProject="${src_main_java}">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
-
     <!-- sql占位符，表示所有的表 -->
     <!--<table tableName="test" domainObjectName="t1">-->
-    <table tableName="user" />
+    <!--禁用 生成动态***ExampleSql-->
+    <table tableName="fish_lib" enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false"/>
       <!--<generatedKey column="id" sqlStatement="select SEQ_ID.nextval from dual"/>-->
+
   </context>
 </generatorConfiguration>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jurua.api.fishinfo.mapper.FishLibMapper">
+  <resultMap id="BaseResultMap" type="com.jurua.api.fishinfo.model.FishLib">
+    <id column="fish_id" jdbcType="BIGINT" property="fishId" />
+    <result column="f_f_id" jdbcType="BIGINT" property="fFId" />
+    <result column="fish_name" jdbcType="VARCHAR" property="fishName" />
+    <result column="scientific_name" jdbcType="VARCHAR" property="scientificName" />
+    <result column="full_length" jdbcType="VARCHAR" property="fullLength" />
+    <result column="fish_description" jdbcType="VARCHAR" property="fishDescription" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    fish_id, f_f_id, fish_name, scientific_name, full_length, fish_description, gmt_create, 
+    gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fish_lib
+    where fish_id = #{fishId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from fish_lib
+    where fish_id = #{fishId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jurua.api.fishinfo.model.FishLib">
+    insert into fish_lib (fish_id, f_f_id, fish_name, 
+      scientific_name, full_length, fish_description, 
+      gmt_create, gmt_modified)
+    values (#{fishId,jdbcType=BIGINT}, #{fFId,jdbcType=BIGINT}, #{fishName,jdbcType=VARCHAR}, 
+      #{scientificName,jdbcType=VARCHAR}, #{fullLength,jdbcType=VARCHAR}, #{fishDescription,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jurua.api.fishinfo.model.FishLib">
+    insert into fish_lib
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fishId != null">
+        fish_id,
+      </if>
+      <if test="fFId != null">
+        f_f_id,
+      </if>
+      <if test="fishName != null">
+        fish_name,
+      </if>
+      <if test="scientificName != null">
+        scientific_name,
+      </if>
+      <if test="fullLength != null">
+        full_length,
+      </if>
+      <if test="fishDescription != null">
+        fish_description,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fishId != null">
+        #{fishId,jdbcType=BIGINT},
+      </if>
+      <if test="fFId != null">
+        #{fFId,jdbcType=BIGINT},
+      </if>
+      <if test="fishName != null">
+        #{fishName,jdbcType=VARCHAR},
+      </if>
+      <if test="scientificName != null">
+        #{scientificName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullLength != null">
+        #{fullLength,jdbcType=VARCHAR},
+      </if>
+      <if test="fishDescription != null">
+        #{fishDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jurua.api.fishinfo.model.FishLib">
+    update fish_lib
+    <set>
+      <if test="fFId != null">
+        f_f_id = #{fFId,jdbcType=BIGINT},
+      </if>
+      <if test="fishName != null">
+        fish_name = #{fishName,jdbcType=VARCHAR},
+      </if>
+      <if test="scientificName != null">
+        scientific_name = #{scientificName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullLength != null">
+        full_length = #{fullLength,jdbcType=VARCHAR},
+      </if>
+      <if test="fishDescription != null">
+        fish_description = #{fishDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fish_id = #{fishId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jurua.api.fishinfo.model.FishLib">
+    update fish_lib
+    set f_f_id = #{fFId,jdbcType=BIGINT},
+      fish_name = #{fishName,jdbcType=VARCHAR},
+      scientific_name = #{scientificName,jdbcType=VARCHAR},
+      full_length = #{fullLength,jdbcType=VARCHAR},
+      fish_description = #{fishDescription,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where fish_id = #{fishId,jdbcType=BIGINT}
+  </update>
+
+  <select id="findFishLibs" resultType="com.jurua.api.fishinfo.model.vo.FishLibsVO">
+    SELECT fish_id fishId, fish_name fishName FROM fish_lib
+  </select>
+</mapper>

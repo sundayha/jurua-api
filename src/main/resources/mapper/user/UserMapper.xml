@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jurua.api.user.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.jurua.api.user.model.User">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="ip_address" jdbcType="VARCHAR" property="ipAddress" />
+    <result column="is_user_state" jdbcType="BIT" property="isUserState" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="qq" jdbcType="BIGINT" property="qq" />
+    <result column="qq_name" jdbcType="VARCHAR" property="qqName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, user_password, person_name, email, phone_num, ip_address, is_user_state, 
+    gmt_create, gmt_modified, qq, qq_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jurua.api.user.model.User">
+    insert into user (user_id, user_name, user_password, 
+      person_name, email, phone_num, 
+      ip_address, is_user_state, gmt_create, 
+      gmt_modified, qq, qq_name
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
+      #{personName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, 
+      #{ipAddress,jdbcType=VARCHAR}, #{isUserState,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{qq,jdbcType=BIGINT}, #{qqName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jurua.api.user.model.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPassword != null">
+        user_password,
+      </if>
+      <if test="personName != null">
+        person_name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phoneNum != null">
+        phone_num,
+      </if>
+      <if test="ipAddress != null">
+        ip_address,
+      </if>
+      <if test="isUserState != null">
+        is_user_state,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="qqName != null">
+        qq_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isUserState != null">
+        #{isUserState,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=BIGINT},
+      </if>
+      <if test="qqName != null">
+        #{qqName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jurua.api.user.model.User">
+    update user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="ipAddress != null">
+        ip_address = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isUserState != null">
+        is_user_state = #{isUserState,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=BIGINT},
+      </if>
+      <if test="qqName != null">
+        qq_name = #{qqName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jurua.api.user.model.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      person_name = #{personName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      ip_address = #{ipAddress,jdbcType=VARCHAR},
+      is_user_state = #{isUserState,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      qq = #{qq,jdbcType=BIGINT},
+      qq_name = #{qqName,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <select id="findUsers" resultType="com.jurua.api.user.model.vo.UsersVO">
+    SELECT user_id userId, person_name personName FROM user
+  </select>
+</mapper>

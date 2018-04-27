@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jurua.api.crowdshare.mapper.FishBubbleMapper">
+  <resultMap id="BaseResultMap" type="com.jurua.api.crowdshare.model.FishBubble">
+    <id column="f_b_id" jdbcType="BIGINT" property="fBId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="fish_id" jdbcType="BIGINT" property="fishId" />
+    <result column="bubble_title" jdbcType="VARCHAR" property="bubbleTitle" />
+    <result column="provenance" jdbcType="VARCHAR" property="provenance" />
+    <result column="fish_height" jdbcType="VARCHAR" property="fishHeight" />
+    <result column="fish_price" jdbcType="DECIMAL" property="fishPrice" />
+    <result column="fish_quantity" jdbcType="CHAR" property="fishQuantity" />
+    <result column="discounts" jdbcType="VARCHAR" property="discounts" />
+    <result column="send_out_condition" jdbcType="VARCHAR" property="sendOutCondition" />
+    <result column="no_shipments_scope" jdbcType="VARCHAR" property="noShipmentsScope" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="is_show_bubble" jdbcType="BIT" property="isShowBubble" />
+    <result column="show_date" jdbcType="TIMESTAMP" property="showDate" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    f_b_id, user_id, fish_id, bubble_title, provenance, fish_height, fish_price, fish_quantity, 
+    discounts, send_out_condition, no_shipments_scope, creation_date, is_show_bubble, 
+    show_date, gmt_create, gmt_modified
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from fish_bubble
+    where f_b_id = #{fBId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from fish_bubble
+    where f_b_id = #{fBId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jurua.api.crowdshare.model.FishBubble">
+    insert into fish_bubble (f_b_id, user_id, fish_id, 
+      bubble_title, provenance, fish_height, 
+      fish_price, fish_quantity, discounts, 
+      send_out_condition, no_shipments_scope, creation_date, 
+      is_show_bubble, show_date, gmt_create, 
+      gmt_modified)
+    values (#{fBId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{fishId,jdbcType=BIGINT}, 
+      #{bubbleTitle,jdbcType=VARCHAR}, #{provenance,jdbcType=VARCHAR}, #{fishHeight,jdbcType=VARCHAR}, 
+      #{fishPrice,jdbcType=DECIMAL}, #{fishQuantity,jdbcType=CHAR}, #{discounts,jdbcType=VARCHAR}, 
+      #{sendOutCondition,jdbcType=VARCHAR}, #{noShipmentsScope,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, 
+      #{isShowBubble,jdbcType=BIT}, #{showDate,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jurua.api.crowdshare.model.FishBubble">
+    insert into fish_bubble
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fBId != null">
+        f_b_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="fishId != null">
+        fish_id,
+      </if>
+      <if test="bubbleTitle != null">
+        bubble_title,
+      </if>
+      <if test="provenance != null">
+        provenance,
+      </if>
+      <if test="fishHeight != null">
+        fish_height,
+      </if>
+      <if test="fishPrice != null">
+        fish_price,
+      </if>
+      <if test="fishQuantity != null">
+        fish_quantity,
+      </if>
+      <if test="discounts != null">
+        discounts,
+      </if>
+      <if test="sendOutCondition != null">
+        send_out_condition,
+      </if>
+      <if test="noShipmentsScope != null">
+        no_shipments_scope,
+      </if>
+      <if test="creationDate != null">
+        creation_date,
+      </if>
+      <if test="isShowBubble != null">
+        is_show_bubble,
+      </if>
+      <if test="showDate != null">
+        show_date,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fBId != null">
+        #{fBId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="fishId != null">
+        #{fishId,jdbcType=BIGINT},
+      </if>
+      <if test="bubbleTitle != null">
+        #{bubbleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="provenance != null">
+        #{provenance,jdbcType=VARCHAR},
+      </if>
+      <if test="fishHeight != null">
+        #{fishHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="fishPrice != null">
+        #{fishPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="fishQuantity != null">
+        #{fishQuantity,jdbcType=CHAR},
+      </if>
+      <if test="discounts != null">
+        #{discounts,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOutCondition != null">
+        #{sendOutCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="noShipmentsScope != null">
+        #{noShipmentsScope,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShowBubble != null">
+        #{isShowBubble,jdbcType=BIT},
+      </if>
+      <if test="showDate != null">
+        #{showDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jurua.api.crowdshare.model.FishBubble">
+    update fish_bubble
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="fishId != null">
+        fish_id = #{fishId,jdbcType=BIGINT},
+      </if>
+      <if test="bubbleTitle != null">
+        bubble_title = #{bubbleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="provenance != null">
+        provenance = #{provenance,jdbcType=VARCHAR},
+      </if>
+      <if test="fishHeight != null">
+        fish_height = #{fishHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="fishPrice != null">
+        fish_price = #{fishPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="fishQuantity != null">
+        fish_quantity = #{fishQuantity,jdbcType=CHAR},
+      </if>
+      <if test="discounts != null">
+        discounts = #{discounts,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOutCondition != null">
+        send_out_condition = #{sendOutCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="noShipmentsScope != null">
+        no_shipments_scope = #{noShipmentsScope,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShowBubble != null">
+        is_show_bubble = #{isShowBubble,jdbcType=BIT},
+      </if>
+      <if test="showDate != null">
+        show_date = #{showDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where f_b_id = #{fBId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jurua.api.crowdshare.model.FishBubble">
+    update fish_bubble
+    set user_id = #{userId,jdbcType=BIGINT},
+      fish_id = #{fishId,jdbcType=BIGINT},
+      bubble_title = #{bubbleTitle,jdbcType=VARCHAR},
+      provenance = #{provenance,jdbcType=VARCHAR},
+      fish_height = #{fishHeight,jdbcType=VARCHAR},
+      fish_price = #{fishPrice,jdbcType=DECIMAL},
+      fish_quantity = #{fishQuantity,jdbcType=CHAR},
+      discounts = #{discounts,jdbcType=VARCHAR},
+      send_out_condition = #{sendOutCondition,jdbcType=VARCHAR},
+      no_shipments_scope = #{noShipmentsScope,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      is_show_bubble = #{isShowBubble,jdbcType=BIT},
+      show_date = #{showDate,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where f_b_id = #{fBId,jdbcType=BIGINT}
+  </update>
+  <select id="exportFishFriendsSellFishExcel" resultType="com.jurua.api.crowdshare.model.vo.ExportFishFriendsSellFishExcelVo">
+    SELECT
+      c.qq_name qqName,
+      c.qq qq,
+      b.scientific_name scientificName,
+      b.fish_name fishName,
+      a.provenance provenance,
+      a.fish_height fishHeight,
+      a.fish_price fishPrice,
+      if(a.fish_quantity = 0, '一对', '一条') fishQuantity,
+      ifnull(a.discounts, '无') discounts,
+      ifnull(a.send_out_condition, '无') sendOutCondition,
+      ifnull(a.no_shipments_scope, '无') noShipmentsScope
+    FROM fish_bubble a LEFT JOIN fish_lib b ON a.fish_id = b.fish_id
+      LEFT JOIN user c ON a.user_id = c.user_id WHERE is_show_bubble = 1 ORDER BY a.creation_date DESC
+  </select>
+
+  <select id="findFishFriendsSellFishTable" resultType="com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO">
+    SELECT
+      a.f_b_id fBId,
+      c.user_id userId,
+      b.fish_id fishId,
+      c.qq_name qqName,
+      c.qq qq,
+      b.scientific_name scientificName,
+      b.fish_name fishName,
+      a.provenance provenance,
+      a.fish_height fishHeight,
+      a.fish_price fishPrice,
+      a.fish_quantity fishQuantity,
+      a.discounts discounts,
+      a.send_out_condition sendOutCondition,
+      a.no_shipments_scope noShipmentsScope
+    FROM fish_bubble a LEFT JOIN fish_lib b ON a.fish_id = b.fish_id
+      LEFT JOIN user c ON a.user_id = c.user_id WHERE is_show_bubble = 1 ORDER BY a.creation_date DESC
+  </select>
+</mapper>
