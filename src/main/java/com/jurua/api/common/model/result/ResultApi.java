@@ -1,6 +1,7 @@
 package com.jurua.api.common.model.result;
 
 
+import com.jurua.api.common.constants.StatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,9 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class ResultApi<T> {
 
     @ApiModelProperty("状态码")
-    private int statusCode;
+    private int statusCode = StatusCode.COMMON_OK.getCode();
     @ApiModelProperty("结果信息")
-    private String message;
+    private String message = StatusCode.COMMON_OK.getMessage();
     @ApiModelProperty("结果数据")
     private T data;
 
