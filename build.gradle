@@ -10,7 +10,7 @@ buildscript {
 	}
 }
 
-//mybatis的Generator插件入口
+//mybatis 的 Generator 插件入口
 configurations {
 	mybatisGenerator
 }
@@ -27,25 +27,39 @@ repositories {
 }
 
 dependencies {
+	// springboot
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
-	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.1')
-	compile('com.github.pagehelper:pagehelper:4.1.1')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	runtime('org.springframework.boot:spring-boot-devtools')
-    compile('io.springfox:springfox-swagger2:2.7.0')
-    compile('io.springfox:springfox-swagger-ui:2.7.0')
-    compile('org.apache.commons:commons-lang3:3.1')
-    compile('io.jsonwebtoken:jjwt:0.7.0')
-//	compile('org.springframework.boot:spring-boot-starter-security')
-//	compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version: '1.3.5'
-	mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.3.5'
+	// runtime('org.springframework.boot:spring-boot-devtools')
+	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.1')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	// springboot
+	// mysql
 	runtime('mysql:mysql-connector-java')
+	compile('com.github.pagehelper:pagehelper:4.1.1')
+	mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.3.5'
 	mybatisGenerator 'mysql:mysql-connector-java:5.1.43'
 	mybatisGenerator 'tk.mybatis:mapper:3.3.9'
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	// mysql
+	// swagger2
+    compile('io.springfox:springfox-swagger2:2.7.0')
+    compile('io.springfox:springfox-swagger-ui:2.7.0')
+	// swagger2
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile('io.jsonwebtoken:jjwt:0.7.0')
+	// poi
+	// compile group: 'org.apache.poi', name: 'poi', version: '3.17'
+	// compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+	compile group: 'cn.afterturn', name: 'easypoi', version: '3.0.3', ext: 'pom'
+	compile group: 'cn.afterturn', name: 'easypoi-base', version: '3.0.3'
+	compile group: 'cn.afterturn', name: 'easypoi-annotation', version: '3.0.3'
+
+	// poi
 }
 
+
+// 自动生成 mybatis xml model dao 文件
 def getDbProperties = {
 	def properties = new Properties()
 	file("src/main/resources/application.properties").withInputStream { inputStream ->
