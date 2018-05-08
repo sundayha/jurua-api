@@ -28,7 +28,6 @@ import static com.jurua.api.common.constants.ServiceConstants.CROWD_SHARE_EXPORT
  * @author 张博【zhangb@lianliantech.cn】
  */
 @Controller
-@CrossOrigin
 @RequestMapping(value = "/CrowdShareServiceController")
 @Api(value = "群共享controller", description = "群共享")
 public class CrowdShareServiceController {
