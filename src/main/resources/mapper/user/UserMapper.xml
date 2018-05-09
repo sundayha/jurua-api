@@ -178,4 +178,7 @@
   <select id="findUsers" resultType="com.jurua.api.user.model.vo.UsersVO">
     SELECT user_id userId, person_name personName FROM user
   </select>
+  <select id="findUserByPhoneNum" resultMap="BaseResultMap">
+    SELECT * FROM user WHERE phone_num = #{phoneNum}
+  </select>
 </mapper>

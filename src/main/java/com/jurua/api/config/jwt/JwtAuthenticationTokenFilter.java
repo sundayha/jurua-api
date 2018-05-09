@@ -48,8 +48,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        // 登出
         if (StringUtils.contains(apiPath, LOGOUT)) {
+            // 删除redis用户信息
             redisTemplate.delete(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
+            // 如果是dev清除cookie信息
             if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
                 Cookie cookie = WebUtils.getCookie(request, JWT_TOKEN);
                 cookie.setValue(null);

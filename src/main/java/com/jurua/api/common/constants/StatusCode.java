@@ -15,7 +15,8 @@ public enum StatusCode {
     TOKEN_INVALID(1000003, "令牌失效"),
     FILTER_OK(1000004, "过滤器通过正常"),
     // 业务状态码
-    TEST(3000000, "StatusCode测试"),
+    //TEST(3000000, "StatusCode测试"),
+    LOGIN_ERROR(3000000, "用户名或密码错误"),
     ;
 
     private int code;

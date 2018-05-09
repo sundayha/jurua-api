@@ -21,7 +21,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TestServiceException.class)
     @ResponseBody
     public ResultApi<Object> testServiceExceptionHandler(Exception e) {
-        return getResultApi(StatusCode.TEST, e);
+        //return getResultApi(StatusCode.TEST, e);
+        return null;
     }
 
     private ResultApi<Object> getResultApi(StatusCode code, Exception e) {

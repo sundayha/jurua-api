@@ -5,7 +5,7 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.github.pagehelper.PageHelper;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
-import com.jurua.api.common.utils.BeanUtil;
+import com.jurua.api.common.utils.page.BeanUtil;
 import com.jurua.api.config.exception.service.CrowdShareServiceException;
 import com.jurua.api.crowdshare.mapper.FishBubbleMapper;
 import com.jurua.api.crowdshare.model.FishBubble;
