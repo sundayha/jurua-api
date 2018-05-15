@@ -43,6 +43,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // api路径
         String uuid, apiPath;
         apiPath  = jwtTokenUtil.getApiPath(request);
+        if ("GET".equals(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // 如果是登陆或者swagger的路径都放过
         if (StringUtils.contains(apiPath, LOGIN) || StringUtils.contains(SWAGGER_URL, apiPath) || apiPath.matches(SWAGGER_RESOURCES_REGEX)) {
             filterChain.doFilter(request, response);
@@ -114,10 +118,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private void cors(HttpServletRequest request, HttpServletResponse response) {
         String allowOrigin = request.getHeader("Origin");
         String allowMethods = "GET,PUT, POST, DELETE";
-        String allowHeaders = "Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified,Cache-Control, Expires, Content-Type, X-E4M-With";
+        String allowHeaders = "Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified,Cache-Control, Expires, Content-Type, X-E4M-With, Authorization";
         response.addHeader("Access-Control-Allow-Credentials", "true");
         response.addHeader("Access-Control-Allow-Headers", allowHeaders);
         response.addHeader("Access-Control-Allow-Methods", allowMethods);
         response.addHeader("Access-Control-Allow-Origin", allowOrigin);
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
     }
 }
