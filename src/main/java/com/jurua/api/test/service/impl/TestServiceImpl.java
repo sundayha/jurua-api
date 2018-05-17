@@ -3,7 +3,7 @@ package com.jurua.api.test.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
-import com.jurua.api.common.utils.BeanUtil;
+import com.jurua.api.common.utils.page.BeanUtil;
 import com.jurua.api.config.exception.service.TestServiceException;
 import com.jurua.api.test.mapper.TestMapper;
 import com.jurua.api.test.model.Test;

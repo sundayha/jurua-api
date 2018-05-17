@@ -3,6 +3,7 @@ package com.jurua.api.config.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jurua.api.common.constants.StatusCode;
 import com.jurua.api.common.model.result.ResultApi;
+import com.jurua.api.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -12,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
@@ -22,12 +25,13 @@ import java.io.PrintWriter;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static com.jurua.api.common.constants.SysConstants.*;
 import static com.jurua.api.common.constants.StatusCode.COMMON_OK;
 import static com.jurua.api.common.constants.StatusCode.FILTER_OK;
+import static com.jurua.api.common.constants.SysConstants.*;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
@@ -46,6 +50,8 @@ public class JwtTokenUtil {
     private long serverSessionTimeout;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Value("${application.start}")
+    private String applicationStart;
 
     /**
      * 加密方式
@@ -73,7 +79,7 @@ public class JwtTokenUtil {
      * @param response 响应对象
      * @apiNote 生成jwt token串
      */
-    public Boolean generateToken(Map<String, Object> claims, String uuid, HttpServletRequest request, HttpServletResponse response) {
+    public Boolean generateToken(Map<String, Object> claims, String uuid, User user, HttpServletRequest request, HttpServletResponse response) {
         Date now = new Date();
         try {
             JwtBuilder builder = Jwts.builder()
@@ -94,10 +100,17 @@ public class JwtTokenUtil {
             String jwtToken = builder.compact();
             // 响应返回到前端的Authorization响应头信息
             response.setHeader(authorization, BEARER.concat(jwtToken));
+            // 为了开发时使用
+            if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
+                Cookie cookie = new Cookie(JWT_TOKEN, jwtToken);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
             // 把用户对象，放入redis中并设置30分钟redis key过期，过期后自动删除
-            redisTemplate.opsForValue().set(uuid, uuid, serverSessionTimeout, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(uuid, user, serverSessionTimeout, TimeUnit.MINUTES);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -112,13 +125,13 @@ public class JwtTokenUtil {
      * @param response 响应对象
      * @apiNote 当token在过滤器中成功验证后，刷新token，并返回前端
      */
-    protected void refreshToken(Map<String, Object> claims, String uuid, String oldToken, HttpServletRequest request, HttpServletResponse response) {
+    protected void refreshToken(Map<String, Object> claims, String uuid, User user, String oldToken, HttpServletRequest request, HttpServletResponse response) {
         // 刷新令牌时，将旧令牌先放入，响应头中，如果令牌过期后，重新生成令牌，在该函数中覆盖这个响应头
         response.setHeader(authorization, BEARER.concat(oldToken));
         Date expDate = getExpirationDateFromToken(oldToken);
         // 如果到刷新令牌时，expDate为空说明前面验证时令牌已经验证通过，但是到刷新令牌时，令牌刚过期，那么这时，刷新令牌
         if (expDate == null) {
-            generateNewTokenAndAddOldTokenTOBlackList(claims, uuid, oldToken, request, response);
+            generateNewTokenAndAddOldTokenTOBlackList(claims, uuid, user, oldToken, request, response);
         } else {
             // 得到过期时间前5分钟的时间
             Date date = new Date(expDate.getTime() - 300 * 1000);
@@ -126,7 +139,7 @@ public class JwtTokenUtil {
             Date now = new Date();
             // 如果当前时间，大于过期时间5分钟时间并且小与过期时间，那么刷新令牌
             if (date.before(now) && now.before(expDate)) {
-                generateNewTokenAndAddOldTokenTOBlackList(claims, uuid, oldToken, request, response);
+                generateNewTokenAndAddOldTokenTOBlackList(claims, uuid, user, oldToken, request, response);
             }
         }
     }
@@ -141,9 +154,9 @@ public class JwtTokenUtil {
      * @param response 响应对象
      * @apiNote 生成新的令牌，把老的令牌放进令牌黑名单里
      */
-    private void generateNewTokenAndAddOldTokenTOBlackList(Map<String, Object> claims, String uuid, String oldToken, HttpServletRequest request, HttpServletResponse response) {
+    private void generateNewTokenAndAddOldTokenTOBlackList(Map<String, Object> claims, String uuid, User user, String oldToken, HttpServletRequest request, HttpServletResponse response) {
         // 如果成功生成新的token，那么把老的token放入令牌黑名单中
-        if (generateToken(claims, uuid, request, response)) {
+        if (generateToken(claims, uuid, user, request, response)) {
             addTokenBlackList(oldToken);
         }
     }
@@ -340,5 +353,25 @@ public class JwtTokenUtil {
             return FILTER_OK;
         }
          //&& StringUtils.contains(apiPath, "jurua")
+    }
+
+    protected User getUserByUuid(String uuid) {
+        return (User)redisTemplate.opsForValue().get(uuid);
+    }
+
+    protected String getToken(HttpServletRequest request) {
+        String requestHeader  = request.getHeader(authorization);
+        String token = null;
+        if (requestHeader != null && requestHeader.startsWith(BEARER)) {
+            token = requestHeader.substring(7);
+
+        }
+        if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
+            Cookie jwtTokenCookie = WebUtils.getCookie(request, JWT_TOKEN);
+            if (!Objects.isNull(jwtTokenCookie)) {
+                token = jwtTokenCookie.getValue();
+            }
+        }
+        return token;
     }
 }

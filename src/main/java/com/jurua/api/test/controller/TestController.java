@@ -6,10 +6,12 @@ import com.jurua.api.common.model.page.PagingResult;
 import com.jurua.api.common.model.result.ResultApi;
 import com.jurua.api.config.jwt.JwtTokenUtil;
 import com.jurua.api.test.model.Test;
-import com.jurua.api.test.model.User;
 import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.UUID;
 
 
 /**
@@ -53,8 +53,8 @@ public class TestController {
         try {
             ResultApi<String> stringResultApi = new ResultApi<>();
             stringResultApi.setData(iTestService.test());
-            stringResultApi.setMessage(StatusCode.TEST.getMessage());
-            stringResultApi.setStatusCode(StatusCode.TEST.getCode());
+            //stringResultApi.setMessage(StatusCode.TEST.getMessage());
+            //stringResultApi.setStatusCode(StatusCode.TEST.getCode());
             return stringResultApi;
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,20 +98,20 @@ public class TestController {
         }
     }
 
-    @ApiOperation(value = "测试登陆", notes = "测试登陆")
-    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
-    public ResultApi login(@ApiParam("用户名密码") @RequestBody User user) throws Exception {
-        try {
-            String uuid = UUID.randomUUID().toString();
-            jwtTokenUtil.generateToken(new HashMap<>(0), uuid, httpServletRequest, httpServletResponse);
-            return new ResultApi();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
+    //@ApiOperation(value = "测试登陆", notes = "测试登陆")
+    //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    //@RequestMapping(value = "/login", method = RequestMethod.POST)
+    //@ResponseBody
+    //public ResultApi login(@ApiParam("用户名密码") @RequestBody User user) throws Exception {
+    //    try {
+    //        String uuid = UUID.randomUUID().toString();
+    //        jwtTokenUtil.generateToken(new HashMap<>(0), uuid, httpServletRequest, httpServletResponse);
+    //        return new ResultApi();
+    //    } catch (Exception e) {
+    //        e.printStackTrace();
+    //        throw e;
+    //    }
+    //}
 
     @ApiOperation(value = "测试注销", notes = "测试注销")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)

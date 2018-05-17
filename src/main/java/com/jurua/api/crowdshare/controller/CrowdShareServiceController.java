@@ -3,7 +3,7 @@ package com.jurua.api.crowdshare.controller;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
 import com.jurua.api.common.model.result.ResultApi;
-import com.jurua.api.common.utils.HttpUtil;
+import com.jurua.api.common.utils.http.HttpUtil;
 import com.jurua.api.crowdshare.model.FishBubble;
 import com.jurua.api.crowdshare.model.query.FishFriendsSellFishTableQuery;
 import com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO;
@@ -28,7 +28,6 @@ import static com.jurua.api.common.constants.ServiceConstants.CROWD_SHARE_EXPORT
  * @author 张博【zhangb@lianliantech.cn】
  */
 @Controller
-@CrossOrigin
 @RequestMapping(value = "/CrowdShareServiceController")
 @Api(value = "群共享controller", description = "群共享")
 public class CrowdShareServiceController {

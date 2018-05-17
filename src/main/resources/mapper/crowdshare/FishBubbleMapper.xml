@@ -230,7 +230,16 @@
       a.provenance provenance,
       a.fish_height fishHeight,
       a.fish_price fishPrice,
-      if(a.fish_quantity = 0, '一对', '一条') fishQuantity,
+      CASE a.fish_quantity
+        WHEN 0
+          THEN '一对'
+        WHEN 1
+          THEN '一条/公母随机'
+        WHEN 2
+          THEN '一条/母'
+        WHEN 3
+          THEN '一条/公'
+        END fishQuantity,
       ifnull(a.discounts, '无') discounts,
       ifnull(a.send_out_condition, '无') sendOutCondition,
       ifnull(a.no_shipments_scope, '无') noShipmentsScope
@@ -238,7 +247,7 @@
       LEFT JOIN user c ON a.user_id = c.user_id WHERE is_show_bubble = 1 ORDER BY a.creation_date DESC
   </select>
 
-  <select id="findFishFriendsSellFishTable" resultType="com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO">
+  <select id="findFishFriendsSellFishTable" resultType="com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO" parameterType="com.jurua.api.crowdshare.model.query.FishFriendsSellFishTableQuery">
     SELECT
       a.f_b_id fBId,
       c.user_id userId,
@@ -255,6 +264,16 @@
       a.send_out_condition sendOutCondition,
       a.no_shipments_scope noShipmentsScope
     FROM fish_bubble a LEFT JOIN fish_lib b ON a.fish_id = b.fish_id
-      LEFT JOIN user c ON a.user_id = c.user_id WHERE is_show_bubble = 1 ORDER BY a.creation_date DESC
+      LEFT JOIN user c ON a.user_id = c.user_id
+      <where>
+        is_show_bubble = 1
+        <if test="query.fishId != null and query.fishId != ''">
+          AND  a.fish_id = #{query.fishId}
+        </if>
+        <if test="query.qq != null and query.qq != ''">
+          AND  c.qq LIKE CONCAT(#{query.qq},'%' )
+        </if>
+      </where>
+      ORDER BY a.creation_date DESC
   </select>
 </mapper>

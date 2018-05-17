@@ -1,4 +1,4 @@
-package com.jurua.api.common.utils;
+package com.jurua.api.common.utils.page;
 
 import com.github.pagehelper.Page;
 import com.jurua.api.common.model.page.PagingInfo;

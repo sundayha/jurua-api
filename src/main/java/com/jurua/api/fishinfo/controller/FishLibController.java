@@ -18,7 +18,6 @@ import java.util.List;
  * @author 张博【zhangb@lianliantech.cn】
  */
 @Controller
-@CrossOrigin
 @RequestMapping(value = "/fishInfo/FishLibController")
 @Api(value = "鱼种类controller", description = "鱼种类")
 public class FishLibController {

@@ -1,4 +1,4 @@
-package com.jurua.api.common.utils;
+package com.jurua.api.common.utils.http;
 
 import org.springframework.http.MediaType;
 

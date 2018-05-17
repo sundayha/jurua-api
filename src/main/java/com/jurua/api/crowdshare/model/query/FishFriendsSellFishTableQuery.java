@@ -11,8 +11,8 @@ import java.io.Serializable;
 @ApiModel(value = "渔友出鱼表格查询条件")
 public class FishFriendsSellFishTableQuery implements Serializable {
     private static final long serialVersionUID = 1693885264311958356L;
-    @ApiModelProperty(value = "鱼名")
-    private String fishName;
+    @ApiModelProperty(value = "与“鱼种表，fish_lib”关联")
+    private Long fishId;
     @ApiModelProperty(value = "qq号")
     private String qq;
 
@@ -24,11 +24,11 @@ public class FishFriendsSellFishTableQuery implements Serializable {
         this.qq = qq;
     }
 
-    public String getFishName() {
-        return fishName;
+    public Long getFishId() {
+        return fishId;
     }
 
-    public void setFishName(String fishName) {
-        this.fishName = fishName;
+    public void setFishId(Long fishId) {
+        this.fishId = fishId;
     }
 }

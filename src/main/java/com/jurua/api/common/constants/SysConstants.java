@@ -12,6 +12,10 @@ public class SysConstants {
      */
     public final static String LOGIN = "/login";
     /**
+     * 登出
+     */
+    public final static String LOGOUT = "/logOut";
+    /**
      * swagger2的url
      */
     public final static String SWAGGER_URL = "/swagger-ui.html, /swagger-resources/configuration/ui, /swagger-resources, /v2/api-docs, /swagger-resources/configuration/security";
@@ -37,4 +41,12 @@ public class SysConstants {
      * 客户端发送的 Authorization HTTP HEADER 格式是 "Bearer YOUR_JWT_TOKEN",这是OAuth的规范规定的。Bearer 后有空格
      */
     public final static String BEARER = "Bearer ";
+    /**
+     * 应用dev方式启动
+     */
+    public final static String APPLICATION_START_DEV = "DEV";
+    /**
+     * 在cookie中存token串的名字
+     */
+    public final static String JWT_TOKEN = "jwtToken";
 }
