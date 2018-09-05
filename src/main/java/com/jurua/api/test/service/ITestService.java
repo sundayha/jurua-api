@@ -25,4 +25,16 @@ public interface ITestService {
     PagingResult<Test, TestQuery> findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException;
 
     User getUser(String userName) throws TestServiceException;
+
+    String cacheData(String p);
+
+    String getCacheData(String p);
+
+    String getAllCacheData();
+
+    String delCacheData(String p);
+
+    String delAllCacheData();
+
+    String updateCacheData(String p);
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,17 +26,12 @@ import java.lang.reflect.Method;
  * 配置redis缓存
  */
 @Configuration
-@EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
     private String host;
     @Value("${spring.redis.port}")
     private int port;
-    //@Value("spring.redis.timeout")
-    //private int timeout;
-    //@Value("spring.redis.database")
-    //private int index;
 
     /**
      * 创建人：张博【zhangb@lianliantech.cn】

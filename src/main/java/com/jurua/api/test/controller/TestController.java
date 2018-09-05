@@ -15,10 +15,7 @@ import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +41,8 @@ public class TestController {
     private HttpServletResponse httpServletResponse;
     @Autowired
     private RedisTemplate redisTemplate;
+
+
 
     @ApiOperation(value = "测试用", notes = "真的是测试用")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个string", response = ResultApi.class)
@@ -118,5 +117,46 @@ public class TestController {
     @RequestMapping(value = "/logOut", method = RequestMethod.POST)
     @ResponseBody
     public void logOut() {
+    }
+
+    @ApiOperation(value = "测试缓存插入", notes = "测试缓存插入")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/cacheData/{p}", method = RequestMethod.GET)
+    @ResponseBody
+    public String cacheData(@PathVariable String p) {
+
+        return iTestService.cacheData(p);
+    }
+
+    @ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/getCacheData/{p}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getCacheData(@PathVariable String p) {
+        return iTestService.getCacheData(p);
+    }
+
+    @ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/getAllCacheData", method = RequestMethod.GET)
+    @ResponseBody
+    public String getAllCacheData() {
+        return iTestService.getAllCacheData();
+    }
+
+    @ApiOperation(value = "测试缓存删除", notes = "测试缓存删除")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/delCacheData/{p}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String delCacheData(@PathVariable String p) {
+        return iTestService.delCacheData(p);
+    }
+
+    @ApiOperation(value = "测试缓存更新", notes = "测试缓存更新")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/updateCacheData/{p}", method = RequestMethod.PUT)
+    @ResponseBody
+    public String updateCacheData(@PathVariable String p) {
+        return iTestService.updateCacheData(p);
     }
 }
