@@ -39,7 +39,7 @@ public class CaffeineConfig<K, V> {
                 // 最大缓存数
                 .maximumSize(1000)
                 // 监听值更新或移除
-                .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键：" + key + " 对应值值：" + value))
+                .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("caffeineCache -> 移除键：" + key + " 对应值值：" + value))
                 // 启用操作缓存期间的记录
                 .recordStats()
                 .build();

@@ -72,33 +72,20 @@ public class TestServiceImpl implements ITestService {
         }
     }
 
-    @Override
-    public User getUser(String userName) throws TestServiceException {
-        return null;
-    }
-
     private Object a(String k) {
         return k.concat("狂操霍雨佳");
     }
 
     @Override
-    public String cacheData(String p) {
+    public String findData(String key) {
         String result;
-        //System.out.println(caffeineUtilsI.contains(p));
-        //System.out.println(cache.getIfPresent(p));
-        if (caffeineUtilsI.containsKey(null)) {
-            caffeineUtilsI.getValue(p, null);
-            return (String) caffeineUtilsI.getValue(p);
+        if (caffeineUtilsI.containsKey(key)) {
+            //caffeineUtilsI.getValue(key, null);
+            return (String) caffeineUtilsI.getValue(key);
         }
-        result = "zb".concat(p);
-        caffeineUtilsI.put(p, result);
+        result = "zb".concat(key);
+        caffeineUtilsI.put(key, null);
         return result;
-    }
-
-    @Override
-    public String getCacheData(String p) {
-
-        return "zb".concat(p);
     }
 
     @Override
@@ -138,8 +125,8 @@ public class TestServiceImpl implements ITestService {
     }
 
     @Override
-    public String delCacheData(String p) {
-        caffeineUtilsI.del(null);
+    public String delData(String key) {
+        caffeineUtilsI.del(key);
         return "zb";
     }
 
@@ -149,7 +136,7 @@ public class TestServiceImpl implements ITestService {
     }
 
     @Override
-    public String updateCacheData(String p) {
+    public String updateData(String p) {
         String result = "狂操霍雨佳".concat(p);
         caffeineUtilsI.put(p, result);
         return "狂操霍雨佳".concat(p);

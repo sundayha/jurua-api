@@ -85,10 +85,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 return;
             }
             // 比较签名时的ip是否相同，如果不相同说明ip地址改变，token可能被劫持，需要重新登录（移动设备的IP经常换这点要注意）
-            if (!StringUtils.equals(jwtTokenUtil.getRequestIp(request), jwtTokenUtil.getIssuerFromToken(token))) {
-                jwtTokenUtil.responseResult(response, StatusCode.IP_EQUALS_ERROR);
-                return;
-            }
+            //if (!StringUtils.equals(jwtTokenUtil.getRequestIp(request), jwtTokenUtil.getIssuerFromToken(token))) {
+            //    jwtTokenUtil.responseResult(response, StatusCode.IP_EQUALS_ERROR);
+            //    return;
+            //}
             // 过滤所有api
             StatusCode statusCode = jwtTokenUtil.aboutPath(request, token);
             // 如果过滤有问题，返回相应的状态

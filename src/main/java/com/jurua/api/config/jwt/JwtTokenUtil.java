@@ -103,6 +103,7 @@ public class JwtTokenUtil {
             // 为了开发时使用
             if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
                 Cookie cookie = new Cookie(JWT_TOKEN, jwtToken);
+                // 很关键
                 cookie.setPath("/");
                 response.addCookie(cookie);
             }

@@ -30,7 +30,10 @@ public class CaffeineUtils<K, V> implements CaffeineUtilsI<K, V> {
     @Override
     public void put(K key, V value) {
         notNull(key, value, "caffeine->put->键或值为空");
-        cache.put(key, value);
+        // 如果 key 存在则更新，不存在则什么都不做
+        //if (containsKey(key)) {
+            cache.put(key, value);
+        //}
     }
 
     @Override
