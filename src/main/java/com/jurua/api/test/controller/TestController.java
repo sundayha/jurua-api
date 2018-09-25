@@ -123,9 +123,15 @@ public class TestController {
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/cacheData/{key}", method = RequestMethod.GET)
     @ResponseBody
-    public String cacheData(@PathVariable String key) {
-
-        return iTestService.findData(key);
+    public ResultApi cacheData(@PathVariable String key) throws Exception {
+        ResultApi<String> resultApi = new ResultApi<>();
+        try {
+            resultApi.setData(iTestService.findData(key));
+            return resultApi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
@@ -148,7 +154,7 @@ public class TestController {
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/delCacheData/{key}", method = RequestMethod.DELETE)
     @ResponseBody
-    public String delCacheData(@PathVariable String key) {
+    public String delCacheData(@PathVariable String key) throws Exception {
         return iTestService.delData(key);
     }
 
@@ -156,7 +162,7 @@ public class TestController {
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/updateCacheData/{key}", method = RequestMethod.PUT)
     @ResponseBody
-    public String updateCacheData(@PathVariable String key) {
+    public String updateCacheData(@PathVariable String key) throws Exception {
         return iTestService.updateData(key);
     }
 }

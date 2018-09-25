@@ -77,15 +77,20 @@ public class TestServiceImpl implements ITestService {
     }
 
     @Override
-    public String findData(String key) {
-        String result;
-        if (caffeineUtilsI.containsKey(key)) {
-            //caffeineUtilsI.getValue(key, null);
-            return (String) caffeineUtilsI.getValue(key);
+    public String findData(String key) throws TestServiceException {
+        try {
+            String result;
+            if (caffeineUtilsI.containsKey(key)) {
+                //caffeineUtilsI.getValue(key, null);
+                return (String) caffeineUtilsI.getValue(key);
+            }
+            result = "zb".concat(key);
+            caffeineUtilsI.put(key, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TestServiceException("查询数据失败", e);
         }
-        result = "zb".concat(key);
-        caffeineUtilsI.put(key, null);
-        return result;
     }
 
     @Override

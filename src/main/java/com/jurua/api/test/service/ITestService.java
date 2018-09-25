@@ -25,13 +25,13 @@ public interface ITestService {
 
     //User getUser(String userName) throws TestServiceException;
 
-    String findData(String p);
+    String findData(String p) throws TestServiceException;
 
-    String getAllCacheData();
+    String getAllCacheData() throws TestServiceException;
 
-    String delData(String p);
+    String delData(String p) throws TestServiceException;
 
-    String delAllCacheData();
+    String delAllCacheData() throws TestServiceException;
 
-    String updateData(String p);
+    String updateData(String p) throws TestServiceException;
 }
