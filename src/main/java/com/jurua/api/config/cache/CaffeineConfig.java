@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,8 +27,9 @@ public class CaffeineConfig<K, V> {
                 .expireAfterWrite(30, TimeUnit.SECONDS)
                 .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键" + key + "值：" + value));
         manager.setCaffeine(caffeineBuilder);
+        List<String> strings = Arrays.asList("test");
+        manager.setCacheNames(strings);
         return manager;
-
     }
 
     @Bean("caffeineCache")

@@ -34,4 +34,10 @@ public interface ITestService {
     String delAllCacheData() throws TestServiceException;
 
     String updateData(String p) throws TestServiceException;
+
+    String findDataAnnotation(String key) throws TestServiceException;
+
+    String delDataAnnotation(String key) throws TestServiceException;
+
+    String updateDataAnnotation(String key) throws TestServiceException;
 }

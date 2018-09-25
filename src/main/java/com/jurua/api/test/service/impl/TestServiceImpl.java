@@ -1,6 +1,5 @@
 package com.jurua.api.test.service.impl;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import com.github.pagehelper.PageHelper;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
@@ -9,11 +8,13 @@ import com.jurua.api.common.utils.page.BeanUtil;
 import com.jurua.api.config.exception.service.TestServiceException;
 import com.jurua.api.test.mapper.TestMapper;
 import com.jurua.api.test.model.Test;
-import com.jurua.api.test.model.User;
 import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,17 +22,18 @@ import org.springframework.stereotype.Service;
  *
  */
 //@CacheConfig(cacheNames = {"caffeineCache"})
+@CacheConfig(cacheNames = "test")
 @Service
 public class TestServiceImpl implements ITestService {
 
     @Autowired
     private TestMapper testMapper;
 
-    @Autowired
-    private Cache<Object, Object> cache;
-
-    @Autowired
-    private CacheManager cacheManager;
+    //@Autowired
+    //private Cache<Object, Object> cache;
+    //
+    //@Autowired
+    //private CacheManager cacheManager;
 
     @Autowired
     private CaffeineUtilsI<Object, Object> caffeineUtilsI;
@@ -72,19 +74,14 @@ public class TestServiceImpl implements ITestService {
         }
     }
 
-    private Object a(String k) {
-        return k.concat("狂操霍雨佳");
-    }
-
     @Override
     public String findData(String key) throws TestServiceException {
         try {
             String result;
             if (caffeineUtilsI.containsKey(key)) {
-                //caffeineUtilsI.getValue(key, null);
                 return (String) caffeineUtilsI.getValue(key);
             }
-            result = "zb".concat(key);
+            result = "数据库查询结果".concat(key);
             caffeineUtilsI.put(key, null);
             return result;
         } catch (Exception e) {
@@ -142,13 +139,32 @@ public class TestServiceImpl implements ITestService {
 
     @Override
     public String updateData(String p) {
-        String result = "狂操霍雨佳".concat(p);
+        String result = "数据库查更新结果: 狂操霍雨佳".concat(p);
         caffeineUtilsI.put(p, result);
-        return "狂操霍雨佳".concat(p);
+        return "数据库查更新结果: 狂操霍雨佳".concat(p);
     }
 
     //@Override
     //public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     //    return testMapper.getUser(username);
     //}
+
+
+    @Cacheable(cacheNames = "test", key = "#key")
+    @Override
+    public String findDataAnnotation(String key) throws TestServiceException {
+        return "数据库查询结果".concat(key);
+    }
+
+    @CacheEvict(cacheNames = "test", key = "#key")
+    @Override
+    public String delDataAnnotation(String key) throws TestServiceException {
+        return "删除数据库结果".concat(key);
+    }
+
+    @CachePut(cacheNames = "test", key = "#key")
+    @Override
+    public String updateDataAnnotation(String key) throws TestServiceException {
+        return "更新数据库查询结果：狂操霍雨佳".concat(key);
+    }
 }

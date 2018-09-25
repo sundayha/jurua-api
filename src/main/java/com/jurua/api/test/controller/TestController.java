@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,10 +38,6 @@ public class TestController {
     private HttpServletRequest httpServletRequest;
     @Autowired
     private HttpServletResponse httpServletResponse;
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-
 
     @ApiOperation(value = "测试用", notes = "真的是测试用")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个string", response = ResultApi.class)
@@ -84,8 +79,6 @@ public class TestController {
     @ResponseBody
     public ResultApi findTestById(@ApiParam("查询条件") @RequestBody PagingInfo<TestQuery> pagingInfo) throws Exception {
         try {
-            String s = (String) redisTemplate.opsForValue().get(String.valueOf(httpServletRequest.getAttribute("uuid")));
-            System.out.println(s);
             ResultApi<PagingResult<Test, TestQuery>> resultApi = new ResultApi<>();
             resultApi.setData(iTestService.findTestById(pagingInfo));
             resultApi.setMessage(StatusCode.COMMON_OK.getMessage());
@@ -126,7 +119,8 @@ public class TestController {
     public ResultApi cacheData(@PathVariable String key) throws Exception {
         ResultApi<String> resultApi = new ResultApi<>();
         try {
-            resultApi.setData(iTestService.findData(key));
+            //resultApi.setData(iTestService.findData(key));
+            resultApi.setData(iTestService.findDataAnnotation(key));
             return resultApi;
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +149,8 @@ public class TestController {
     @RequestMapping(value = "/delCacheData/{key}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delCacheData(@PathVariable String key) throws Exception {
-        return iTestService.delData(key);
+        //return iTestService.delData(key);
+        return iTestService.delDataAnnotation(key);
     }
 
     @ApiOperation(value = "测试缓存更新", notes = "测试缓存更新")
@@ -163,6 +158,7 @@ public class TestController {
     @RequestMapping(value = "/updateCacheData/{key}", method = RequestMethod.PUT)
     @ResponseBody
     public String updateCacheData(@PathVariable String key) throws Exception {
-        return iTestService.updateData(key);
+        //return iTestService.updateData(key);
+        return iTestService.updateDataAnnotation(key);
     }
 }

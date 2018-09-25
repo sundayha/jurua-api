@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +24,7 @@ import java.lang.reflect.Method;
  * 配置redis缓存
  */
 @Configuration
-public class CacheConfig extends CachingConfigurerSupport {
+public class RedisConfig extends CachingConfigurerSupport {
 
     @Value("${spring.redis.host}")
     private String host;
@@ -63,10 +61,10 @@ public class CacheConfig extends CachingConfigurerSupport {
      * @param redisTemplate redis模板
      * @apiNote 返回实现redis的缓存管理器
      */
-    @Bean
-    public CacheManager cacheManager(RedisTemplate redisTemplate) {
-        return new RedisCacheManager(redisTemplate);
-    }
+    //@Bean
+    //public CacheManager cacheManager(RedisTemplate redisTemplate) {
+    //    return new RedisCacheManager(redisTemplate);
+    //}
 
     /**
      * 创建人：张博【zhangb@lianliantech.cn】
