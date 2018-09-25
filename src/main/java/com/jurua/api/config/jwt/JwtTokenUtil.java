@@ -9,9 +9,10 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RMap;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
@@ -48,8 +49,10 @@ public class JwtTokenUtil {
     private String authorization;
     @Value("${server.session.timeout}")
     private long serverSessionTimeout;
+    //@Autowired
+    //private RedisTemplate redisTemplate;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedissonClient redissonClient;
     @Value("${application.start}")
     private String applicationStart;
 
@@ -108,7 +111,10 @@ public class JwtTokenUtil {
                 response.addCookie(cookie);
             }
             // 把用户对象，放入redis中并设置30分钟redis key过期，过期后自动删除
-            redisTemplate.opsForValue().set(uuid, user, serverSessionTimeout, TimeUnit.MINUTES);
+            RMap<Object, Object> rMap = redissonClient.getMap("users");
+            rMap.put(uuid, user);
+            rMap.expire(serverSessionTimeout, TimeUnit.MINUTES);
+            //redisTemplate.opsForValue().set(uuid, user, serverSessionTimeout, TimeUnit.MINUTES);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,7 +324,8 @@ public class JwtTokenUtil {
      * @apiNote 将令牌加入令牌黑名单中
      */
     private void addTokenBlackList(String token) {
-        redisTemplate.opsForSet().add(TOKEN_BLACK_LIST, token);
+        //redisTemplate.opsForSet().add(TOKEN_BLACK_LIST, token);
+        redissonClient.getMap("blackList").put(TOKEN_BLACK_LIST, token);
     }
 
     /**
@@ -344,7 +351,8 @@ public class JwtTokenUtil {
         // 如果是登出
         if (StringUtils.contains(apiPath, LOG_OUT)) {
             // 删除redis中与登陆信息相关的key-value
-            redisTemplate.delete(getUuidFromToken(token));
+            redissonClient.getMap("users").remove(getUuidFromToken(token));
+            //redisTemplate.delete(getUuidFromToken(token));
             // 然后把该令牌加入令牌黑名单
             addTokenBlackList(token);
             //responseResult(response, COMMON_OK);
@@ -357,7 +365,8 @@ public class JwtTokenUtil {
     }
 
     protected User getUserByUuid(String uuid) {
-        return (User)redisTemplate.opsForValue().get(uuid);
+        return (User)redissonClient.getMap("users").get(uuid);
+        //return (User)redisTemplate.opsForValue().get(uuid);
     }
 
     protected String getToken(HttpServletRequest request) {
