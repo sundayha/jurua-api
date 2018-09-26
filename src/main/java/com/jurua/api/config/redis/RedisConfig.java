@@ -1,19 +1,16 @@
 package com.jurua.api.config.redis;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
-
 /**
  * @author 张博【zhangb@lianliantech.cn】
  *
  * 配置redis缓存
  */
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
 
-    @Value("${spring.redis.host}")
-    private String host;
-    @Value("${spring.redis.port}")
-    private int port;
+    //@Value("${spring.redis.host}")
+    //private String host;
+    //@Value("${spring.redis.port}")
+    //private int port;
 
     /**
      * 创建人：张博【zhangb@lianliantech.cn】

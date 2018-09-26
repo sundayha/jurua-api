@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
  * @author 张博【zhangb@lianliantech.cn】
  *
  */
-//@CacheConfig(cacheNames = {"caffeineCache"})
-@CacheConfig(cacheNames = "test")
+
+@CacheConfig(cacheNames = {"juruaServiceCache"})
 @Service
 public class TestServiceImpl implements ITestService {
 
@@ -146,19 +146,20 @@ public class TestServiceImpl implements ITestService {
     //}
 
 
-    @Cacheable(cacheNames = "test", key = "#key")
+    @Cacheable(key = "#key")
     @Override
     public String findDataAnnotation(String key) throws TestServiceException {
-        return "数据库查询结果".concat(key);
+        //return "数据库查询结果".concat(key);
+        return null;
     }
 
-    @CacheEvict(cacheNames = "test", key = "#key")
+    @CacheEvict(key = "#key")
     @Override
     public String delDataAnnotation(String key) throws TestServiceException {
         return "删除数据库结果".concat(key);
     }
 
-    @CachePut(cacheNames = "test", key = "#key")
+    @CachePut(key = "#key")
     @Override
     public String updateDataAnnotation(String key) throws TestServiceException {
         return "更新数据库查询结果：狂操霍雨佳".concat(key);

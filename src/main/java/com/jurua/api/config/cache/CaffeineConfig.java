@@ -7,32 +7,31 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
  */
 @Configuration
-public class CaffeineConfig<K, V> {
+public class CaffeineConfig {
 
-    @Bean("caffeineCacheManager")
-    @Primary
+    @Bean
     public CacheManager caffeineCacheManager() {
         final CaffeineCacheManager manager = new CaffeineCacheManager("caffeineCache");
         final Caffeine<Object, Object> caffeineBuilder = Caffeine.newBuilder()
-                .expireAfterWrite(30, TimeUnit.SECONDS)
-                .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键" + key + "值：" + value));
+                .expireAfterWrite(7, TimeUnit.DAYS)
+                .initialCapacity(100)
+                .maximumSize(1000)
+                .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键" + key + "值：" + value))
+                .recordStats();
         manager.setCaffeine(caffeineBuilder);
-        List<String> strings = Arrays.asList("test");
-        manager.setCacheNames(strings);
+        manager.setCacheNames(Arrays.asList("juruaServiceCache"));
         return manager;
     }
 
-    @Bean("caffeineCache")
+    @Bean
     public Cache cache() {
         return Caffeine.newBuilder()
                 // 访问后7天过期，期间再次访问，则过期时间刷新
