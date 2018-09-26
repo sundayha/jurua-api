@@ -10,6 +10,7 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 public class RedisCaffeineCacheManager extends CaffeineCacheManager {
 
     private RedissonClient redissonClient;
+
     public RedisCaffeineCacheManager(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
     }

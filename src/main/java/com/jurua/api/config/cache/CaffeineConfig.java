@@ -28,9 +28,7 @@ public class CaffeineConfig {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/9/26 下午5:35
      * @param redissonClient redisson 客户端
-     * @apiNote
-     * @return
-     * @throws
+     * @apiNote 在该类注入 redissonClient
      */
     public CaffeineConfig(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
@@ -43,7 +41,10 @@ public class CaffeineConfig {
                 .expireAfterWrite(7, TimeUnit.DAYS)
                 .initialCapacity(100)
                 .maximumSize(1000)
-                .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键" + key + "值：" + value))
+                .removalListener(
+                    (Object key, Object value, RemovalCause cause) ->
+                        System.out.println("移除键" + key + "值：" + value)
+                )
                 .recordStats();
         manager.setCaffeine(caffeineBuilder);
         manager.setCacheNames(Arrays.asList(CAFFEINE_CACHE_JURUA_SERVICE_NAME));
