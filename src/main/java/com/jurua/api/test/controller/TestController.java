@@ -4,7 +4,6 @@ import com.jurua.api.common.constants.StatusCode;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
 import com.jurua.api.common.model.result.ResultApi;
-import com.jurua.api.config.jwt.JwtTokenUtil;
 import com.jurua.api.test.model.Test;
 import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
@@ -12,12 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.HttpURLConnection;
 
 
@@ -30,14 +26,11 @@ import java.net.HttpURLConnection;
 @Api(value = "测试controller", description = "测试测试")
 public class TestController {
 
-    @Autowired
     private ITestService iTestService;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private HttpServletRequest httpServletRequest;
-    @Autowired
-    private HttpServletResponse httpServletResponse;
+
+    public TestController(ITestService iTestService) {
+        this.iTestService = iTestService;
+    }
 
     @ApiOperation(value = "测试用", notes = "真的是测试用")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个string", response = ResultApi.class)

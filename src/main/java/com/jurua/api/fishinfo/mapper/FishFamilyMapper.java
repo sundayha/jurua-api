@@ -1,7 +1,8 @@
 package com.jurua.api.fishinfo.mapper;
 
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.fishinfo.model.FishFamily;
-
+@Mapper
 public interface FishFamilyMapper {
     int deleteByPrimaryKey(Long fFId);
 

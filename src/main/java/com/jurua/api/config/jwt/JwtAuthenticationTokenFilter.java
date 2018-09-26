@@ -3,7 +3,6 @@ package com.jurua.api.config.jwt;
 import com.jurua.api.common.constants.StatusCode;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
@@ -26,13 +25,17 @@ import static com.jurua.api.common.constants.SysConstants.*;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    //@Autowired
-    //private RedisTemplate redisTemplate;
-    @Autowired
     private RedissonClient redissonClient;
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    // http请求时，header中的Authorization头
+
+    public JwtAuthenticationTokenFilter(RedissonClient redissonClient, JwtTokenUtil jwtTokenUtil) {
+        this.redissonClient = redissonClient;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    /**
+     * http请求时，header中的Authorization头
+     */
     @Value("${jwt.header}")
     private String authorization;
     @Value("${application.start}")

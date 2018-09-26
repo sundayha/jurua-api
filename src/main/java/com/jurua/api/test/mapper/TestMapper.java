@@ -1,6 +1,7 @@
 package com.jurua.api.test.mapper;
 
 import com.jurua.api.common.model.page.PagingInfo;
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.test.model.Test;
 import com.jurua.api.test.model.User;
 import com.jurua.api.test.model.query.TestQuery;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author 张博【zhangb@lianliantech.cn】
  *
  */
+@Mapper
 public interface TestMapper {
     int deleteByPrimaryKey(Long id);
 

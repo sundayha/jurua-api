@@ -5,7 +5,6 @@ import com.jurua.api.user.mapper.UserMapper;
 import com.jurua.api.user.model.User;
 import com.jurua.api.user.model.vo.UsersVO;
 import com.jurua.api.user.service.IUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +15,11 @@ import java.util.List;
 @Service
 public class UserImpl implements IUser {
 
-    @Autowired
     private UserMapper userMapper;
+
+    public UserImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public List<UsersVO> findUsers() throws UserServiceException {

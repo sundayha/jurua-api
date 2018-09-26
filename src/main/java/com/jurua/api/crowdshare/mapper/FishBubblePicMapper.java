@@ -1,7 +1,9 @@
 package com.jurua.api.crowdshare.mapper;
 
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.crowdshare.model.FishBubblePic;
 
+@Mapper
 public interface FishBubblePicMapper {
     int deleteByPrimaryKey(Long id);
 

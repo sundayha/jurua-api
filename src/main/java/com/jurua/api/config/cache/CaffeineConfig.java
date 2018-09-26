@@ -33,7 +33,7 @@ public class CaffeineConfig<K, V> {
     }
 
     @Bean("caffeineCache")
-    public Cache<K, V> caffeineCache() {
+    public Cache cache() {
         return Caffeine.newBuilder()
                 // 访问后7天过期，期间再次访问，则过期时间刷新
                 .expireAfterAccess(7, TimeUnit.DAYS)

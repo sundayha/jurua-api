@@ -24,23 +24,3 @@ spring:
     url: jdbc:mysql://localhost:3306/jurua-dev?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&autoReconnect=true
     # 密码
     password: root
-  redis:
-    # 数据库
-    database: 0
-    redisson:
-      config: classpath:redisson.yaml
-    # 主机
-    host: localhost
-    # 密码
-    password: '# Login password of the redis server.'
-    pool:
-      # 最大连接数
-      max-active: 8
-      # 最小空闲连接数
-      min-idle: 0
-      # 最大空闲连接数
-      max-idle: 8
-      # 最大连接分配等待时间，负数为无限期等待
-      max-wait: -1
-    # redis 端口
-    port: 6379

@@ -5,7 +5,6 @@ import com.jurua.api.fishinfo.mapper.FishLibMapper;
 import com.jurua.api.fishinfo.model.FishLib;
 import com.jurua.api.fishinfo.model.vo.FishLibsVO;
 import com.jurua.api.fishinfo.service.IFishLibService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +15,11 @@ import java.util.List;
 @Service
 public class FishLibServiceImpl implements IFishLibService {
 
-    @Autowired
     private FishLibMapper fishLibMapper;
+
+    public FishLibServiceImpl(FishLibMapper fishLibMapper) {
+        this.fishLibMapper = fishLibMapper;
+    }
 
     @Override
     public void insertFishLib(FishLib fishLib) throws FishLibServiceException {

@@ -10,7 +10,6 @@ import com.jurua.api.test.mapper.TestMapper;
 import com.jurua.api.test.model.Test;
 import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -26,17 +25,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestServiceImpl implements ITestService {
 
-    @Autowired
     private TestMapper testMapper;
-
-    //@Autowired
-    //private Cache<Object, Object> cache;
-    //
-    //@Autowired
-    //private CacheManager cacheManager;
-
-    @Autowired
     private CaffeineUtilsI<Object, Object> caffeineUtilsI;
+
+    public TestServiceImpl(TestMapper testMapper, CaffeineUtilsI<Object, Object> caffeineUtilsI) {
+        this.testMapper = testMapper;
+        this.caffeineUtilsI = caffeineUtilsI;
+    }
+
     @Override
     public String test() throws TestServiceException {
 

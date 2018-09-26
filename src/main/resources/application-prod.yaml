@@ -16,13 +16,3 @@ spring:
     password: root
     url: jdbc:mysql://localhost:3306/jurua?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&autoReconnect=true
     username: root
-  redis:
-    database: 0
-    host: localhost
-    password: '# Login password of the redis server.'
-    pool:
-      max-active: 8
-      min-idle: 0
-      max-idle: 8
-      max-wait: -1
-    port: 6379

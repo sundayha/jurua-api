@@ -1,10 +1,12 @@
 package com.jurua.api.fishinfo.mapper;
 
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.fishinfo.model.FishLib;
 import com.jurua.api.fishinfo.model.vo.FishLibsVO;
 
 import java.util.List;
 
+@Mapper
 public interface FishLibMapper {
     int deleteByPrimaryKey(Long fishId);
 

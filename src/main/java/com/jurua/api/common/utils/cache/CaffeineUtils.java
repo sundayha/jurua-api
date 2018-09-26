@@ -3,7 +3,6 @@ package com.jurua.api.common.utils.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -18,8 +17,11 @@ public class CaffeineUtils<K, V> implements CaffeineUtilsI<K, V> {
 
     private final static Logger logger = LoggerFactory.getLogger(CaffeineUtils.class);
 
-    @Autowired
     private Cache<K, V> cache;
+
+    public CaffeineUtils(Cache<K, V> cache) {
+        this.cache = cache;
+    }
 
     @Override
     public boolean containsKey(K key) {

@@ -1,6 +1,7 @@
 package com.jurua.api.crowdshare.mapper;
 
 import com.jurua.api.common.model.page.PagingInfo;
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.crowdshare.model.FishBubble;
 import com.jurua.api.crowdshare.model.query.FishFriendsSellFishTableQuery;
 import com.jurua.api.crowdshare.model.vo.ExportFishFriendsSellFishExcelVo;
@@ -8,6 +9,7 @@ import com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO;
 
 import java.util.List;
 
+@Mapper
 public interface FishBubbleMapper {
     int deleteByPrimaryKey(Long fBId);
 

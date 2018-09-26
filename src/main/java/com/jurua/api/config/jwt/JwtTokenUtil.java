@@ -11,7 +11,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
@@ -49,12 +48,13 @@ public class JwtTokenUtil {
     private String authorization;
     @Value("${server.session.timeout}")
     private long serverSessionTimeout;
-    //@Autowired
-    //private RedisTemplate redisTemplate;
-    @Autowired
-    private RedissonClient redissonClient;
     @Value("${application.start}")
     private String applicationStart;
+    private RedissonClient redissonClient;
+
+    public JwtTokenUtil(RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
+    }
 
     /**
      * 加密方式

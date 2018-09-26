@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +34,13 @@ import java.util.UUID;
 @Api(value = "用户controller", description = "用户")
 public class UserController {
 
-    @Autowired
     private IUser iUser;
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private HttpServletRequest httpServletRequest;
-    @Autowired
-    private HttpServletResponse httpServletResponse;
+
+    public UserController(IUser iUser, JwtTokenUtil jwtTokenUtil) {
+        this.iUser = iUser;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     @ApiOperation(value = "查询所有用户的集合对象", notes = "查询所有用户的集合对象")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
@@ -63,7 +61,7 @@ public class UserController {
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ResultApi login(@ApiParam("用户名密码") @RequestBody UserLoginQ userLoginQ) throws Exception {
+    public ResultApi login(@ApiParam("用户名密码") @RequestBody UserLoginQ userLoginQ, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         try {
             ResultApi resultApi = new ResultApi();
             User user = iUser.findUserByPhoneNum(userLoginQ.getPhoneNum());
