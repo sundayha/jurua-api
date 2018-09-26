@@ -12,6 +12,8 @@ import java.io.IOException;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 使用 redisson 管理的 redis 集群做为二级缓存
  */
 @Configuration
 public class RedissonConfig {

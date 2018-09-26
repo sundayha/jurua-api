@@ -16,12 +16,14 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_SERVICE_NAME;
+
 /**
  * @author 张博【zhangb@lianliantech.cn】
  *
  */
 
-@CacheConfig(cacheNames = {"juruaServiceCache"})
+@CacheConfig(cacheNames = {CAFFEINE_CACHE_JURUA_SERVICE_NAME})
 @Service
 public class TestServiceImpl implements ITestService {
 
@@ -149,8 +151,7 @@ public class TestServiceImpl implements ITestService {
     @Cacheable(key = "#key")
     @Override
     public String findDataAnnotation(String key) throws TestServiceException {
-        //return "数据库查询结果".concat(key);
-        return null;
+        return "数据库查询结果".concat(key);
     }
 
     @CacheEvict(key = "#key")

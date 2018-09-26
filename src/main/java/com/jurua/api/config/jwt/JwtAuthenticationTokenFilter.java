@@ -60,7 +60,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 登出
         if (StringUtils.contains(apiPath, LOGOUT)) {
             // 删除redis用户信息
-            redissonClient.getMap("users").remove(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
+            redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).remove(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
             //redisTemplate.delete(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
             // 如果是dev清除cookie信息
             if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
@@ -86,7 +86,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 校验通过后，取得令牌中的uuid
             uuid = jwtTokenUtil.getUuidFromToken(token);
             // 查看redis中是否存在与用户登陆时产生的值
-            if (StringUtils.isEmpty(uuid) || redissonClient.getMap("users").get(uuid) == null) {
+            if (StringUtils.isEmpty(uuid) || redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).get(uuid) == null) {
             //if (StringUtils.isEmpty(uuid) || redisTemplate.opsForValue().get(uuid) == null) {
                 // 返回会话过期（这里可能存在判断重复，token过期后这里访问不到，token刷新时，又会重置redis中的过期时间）
                 jwtTokenUtil.responseResult(response, StatusCode.SESSION_TIME_OUT);

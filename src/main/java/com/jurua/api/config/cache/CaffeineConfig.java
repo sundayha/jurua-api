@@ -3,23 +3,42 @@ package com.jurua.api.config.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.jurua.api.common.utils.cache.RedisCaffeineCacheManager;
+import org.redisson.api.RedissonClient;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_SERVICE_NAME;
+
 /**
  * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 使用 caffeine 做为一级缓存
  */
 @Configuration
 public class CaffeineConfig {
 
+    private RedissonClient redissonClient;
+
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/9/26 下午5:35
+     * @param redissonClient redisson 客户端
+     * @apiNote
+     * @return
+     * @throws
+     */
+    public CaffeineConfig(RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
+    }
+
     @Bean
     public CacheManager caffeineCacheManager() {
-        final CaffeineCacheManager manager = new CaffeineCacheManager("caffeineCache");
+        final RedisCaffeineCacheManager manager = new RedisCaffeineCacheManager(redissonClient);
         final Caffeine<Object, Object> caffeineBuilder = Caffeine.newBuilder()
                 .expireAfterWrite(7, TimeUnit.DAYS)
                 .initialCapacity(100)
@@ -27,7 +46,7 @@ public class CaffeineConfig {
                 .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("移除键" + key + "值：" + value))
                 .recordStats();
         manager.setCaffeine(caffeineBuilder);
-        manager.setCacheNames(Arrays.asList("juruaServiceCache"));
+        manager.setCacheNames(Arrays.asList(CAFFEINE_CACHE_JURUA_SERVICE_NAME));
         return manager;
     }
 

@@ -111,7 +111,7 @@ public class JwtTokenUtil {
                 response.addCookie(cookie);
             }
             // 把用户对象，放入redis中并设置30分钟redis key过期，过期后自动删除
-            RMap<Object, Object> rMap = redissonClient.getMap("users");
+            RMap<Object, Object> rMap = redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME);
             rMap.put(uuid, user);
             rMap.expire(serverSessionTimeout, TimeUnit.MINUTES);
             //redisTemplate.opsForValue().set(uuid, user, serverSessionTimeout, TimeUnit.MINUTES);
@@ -351,7 +351,7 @@ public class JwtTokenUtil {
         // 如果是登出
         if (StringUtils.contains(apiPath, LOG_OUT)) {
             // 删除redis中与登陆信息相关的key-value
-            redissonClient.getMap("users").remove(getUuidFromToken(token));
+            redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).remove(getUuidFromToken(token));
             //redisTemplate.delete(getUuidFromToken(token));
             // 然后把该令牌加入令牌黑名单
             addTokenBlackList(token);
@@ -365,7 +365,7 @@ public class JwtTokenUtil {
     }
 
     protected User getUserByUuid(String uuid) {
-        return (User)redissonClient.getMap("users").get(uuid);
+        return (User)redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).get(uuid);
         //return (User)redisTemplate.opsForValue().get(uuid);
     }
 
