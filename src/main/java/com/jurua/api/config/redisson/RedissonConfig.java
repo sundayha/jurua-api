@@ -23,9 +23,4 @@ public class RedissonConfig {
         Config config = Config.fromYAML(configFile.getInputStream());
         return Redisson.create(config);
     }
-
-    //@Bean
-    //CacheManager cacheManager(RedissonClient redissonClient) {
-    //    return new RedissonSpringCacheManager(redissonClient, "classpath:/redisson.yaml");
-    //}
 }

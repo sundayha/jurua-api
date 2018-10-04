@@ -25,16 +25,6 @@ public interface ITestService {
 
     //User getUser(String userName) throws TestServiceException;
 
-    String findData(String p) throws TestServiceException;
-
-    String getAllCacheData() throws TestServiceException;
-
-    String delData(String p) throws TestServiceException;
-
-    String delAllCacheData() throws TestServiceException;
-
-    String updateData(String p) throws TestServiceException;
-
     String findDataAnnotation(String key) throws TestServiceException;
 
     String delDataAnnotation(String key) throws TestServiceException;

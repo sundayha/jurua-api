@@ -6,6 +6,8 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 继承 CaffeineCacheManager 覆盖了 createCaffeineCache 方法
  */
 public class RedisCaffeineCacheManager extends CaffeineCacheManager {
 

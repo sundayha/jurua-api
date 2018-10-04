@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.caffeine.CaffeineCache;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
@@ -12,6 +13,8 @@ import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_S
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
+ *
+ * 继承 CaffeineCache，使用 redisson 实现2级缓存
  */
 public class RedisCaffeineCache extends CaffeineCache {
 
@@ -19,6 +22,15 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     private RedissonClient redissonClient;
 
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/4 10:12 AM
+     * @param name cache name
+     * @param cache caffeine cache
+     * @param allowNullValues 是否允许为 null
+     * @param redissonClient redisson 访问接口
+     * @apiNote spring 注入
+     */
     public RedisCaffeineCache(String name, Cache<Object, Object> cache, boolean allowNullValues, RedissonClient redissonClient) {
         super(name, cache, allowNullValues);
         this.cache = cache;
@@ -41,12 +53,45 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     @Override
     protected Object lookup(Object key) {
-        return this.cache.getIfPresent(key);
+        Object value = this.cache.getIfPresent(key);
+        Object redisValue = null;
+        if (Objects.isNull(value)) {
+            redisValue = redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).get(key);
+        }
+        // 如果二级缓存中有值
+        if (!Objects.isNull(redisValue)) {
+            // 则把二级缓存中的值放入一级缓存中
+            this.putCaffeine(key, redisValue);
+            // 赋值相当于 @Cacheable 注解不 miss
+            value = redisValue;
+        }
+        return value;
     }
 
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/4 11:14 AM
+     * @param key 键
+     * @param value 值
+     * @apiNote 只更新 caffeine 的缓存
+     */
+    private void putCaffeine(Object key, Object value) {
+        this.cache.put(key, toStoreValue(value));
+    }
+
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/4 9:36 AM
+     * @param key 键
+     * @param value 值
+     * @apiNote 如果 @CachePut 或者 @Cacheable miss 则走该方法。value 为 null 时不存入 redis。
+     * 因为 RMap 继承了 ConcurrentHashMap，ConcurrentHashMap 要走键值都不能为 null。为了不破坏兼容性，RMap 也不允许键值为 null
+     */
     @Override
     public void put(Object key, Object value) {
-        redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
+        if (!Objects.isNull(value)) {
+            redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
+        }
         this.cache.put(key, toStoreValue(value));
     }
 
@@ -59,11 +104,13 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     @Override
     public void evict(Object key) {
+        redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
         this.cache.invalidate(key);
     }
 
     @Override
     public void clear() {
+        redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).readAllMap();
         this.cache.invalidateAll();
     }
 

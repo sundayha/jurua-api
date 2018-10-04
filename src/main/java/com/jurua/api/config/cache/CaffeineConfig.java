@@ -37,18 +37,21 @@ public class CaffeineConfig {
     @Bean
     public CacheManager caffeineCacheManager() {
         final RedisCaffeineCacheManager manager = new RedisCaffeineCacheManager(redissonClient);
-        final Caffeine<Object, Object> caffeineBuilder = Caffeine.newBuilder()
+        manager.setCaffeine(caffeineBuilder());
+        manager.setCacheNames(Arrays.asList(CAFFEINE_CACHE_JURUA_SERVICE_NAME));
+        return manager;
+    }
+
+    private Caffeine<Object, Object> caffeineBuilder() {
+        return Caffeine.newBuilder()
                 .expireAfterWrite(7, TimeUnit.DAYS)
                 .initialCapacity(100)
                 .maximumSize(1000)
                 .removalListener(
-                    (Object key, Object value, RemovalCause cause) ->
-                        System.out.println("移除键" + key + "值：" + value)
+                        (Object key, Object value, RemovalCause cause) ->
+                                System.out.println("caffeineCacheManager -> 移除键" + key + "值：" + value)
                 )
                 .recordStats();
-        manager.setCaffeine(caffeineBuilder);
-        manager.setCacheNames(Arrays.asList(CAFFEINE_CACHE_JURUA_SERVICE_NAME));
-        return manager;
     }
 
     @Bean
