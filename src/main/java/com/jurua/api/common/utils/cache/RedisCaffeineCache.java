@@ -89,7 +89,7 @@ public class RedisCaffeineCache extends CaffeineCache {
      */
     @Override
     public void put(Object key, Object value) {
-        if (!Objects.isNull(value)) {
+        if (!Objects.isNull(key) && !Objects.isNull(value)) {
             redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
         }
         this.cache.put(key, toStoreValue(value));
@@ -104,7 +104,9 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     @Override
     public void evict(Object key) {
-        redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
+        if (!Objects.isNull(key)) {
+            redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
+        }
         this.cache.invalidate(key);
     }
 
