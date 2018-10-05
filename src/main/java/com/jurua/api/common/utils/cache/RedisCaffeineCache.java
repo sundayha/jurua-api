@@ -2,6 +2,8 @@ package com.jurua.api.common.utils.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.jurua.api.common.utils.cache.broadcast.CacheMsgBroadcast;
+import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.caffeine.CaffeineCache;
 
@@ -18,9 +20,10 @@ import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_S
  */
 public class RedisCaffeineCache extends CaffeineCache {
 
-    private final com.github.benmanes.caffeine.cache.Cache<Object, Object> cache;
+    private com.github.benmanes.caffeine.cache.Cache<Object, Object> cache;
 
     private RedissonClient redissonClient;
+    private CacheMsgBroadcast cacheMsgBroadcast;
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
@@ -31,10 +34,20 @@ public class RedisCaffeineCache extends CaffeineCache {
      * @param redissonClient redisson 访问接口
      * @apiNote spring 注入
      */
-    public RedisCaffeineCache(String name, Cache<Object, Object> cache, boolean allowNullValues, RedissonClient redissonClient) {
+    public RedisCaffeineCache(String name, Cache<Object, Object> cache, boolean allowNullValues, RedissonClient redissonClient, CacheMsgBroadcast cacheMsgBroadcast) {
         super(name, cache, allowNullValues);
         this.cache = cache;
         this.redissonClient = redissonClient;
+        this.cacheMsgBroadcast = cacheMsgBroadcast;
+        //this.t();
+    }
+
+    private void t() {
+        RTopic<Object> topic = redissonClient.getTopic("redissonTopic");
+        //topic.
+        topic.addListener((CharSequence channel, Object msg) -> {
+            System.out.println(msg);
+        });
     }
 
     @Override
@@ -89,10 +102,16 @@ public class RedisCaffeineCache extends CaffeineCache {
      */
     @Override
     public void put(Object key, Object value) {
-        if (!Objects.isNull(key) && !Objects.isNull(value)) {
-            redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
+        try {
+            if (!Objects.isNull(key) && !Objects.isNull(value)) {
+                redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
+            }
+            this.cache.put(key, toStoreValue(value));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cacheMsgBroadcast.sentEvict(cache, (String) key);
         }
-        this.cache.put(key, toStoreValue(value));
     }
 
     @Override
@@ -104,10 +123,16 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     @Override
     public void evict(Object key) {
-        if (!Objects.isNull(key)) {
-            redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
+        try {
+            if (!Objects.isNull(key)) {
+                redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
+            }
+            this.cache.invalidate(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cacheMsgBroadcast.sentEvict(cache, (String) key);
         }
-        this.cache.invalidate(key);
     }
 
     @Override
