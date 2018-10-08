@@ -49,4 +49,14 @@ public class SysConstants {
      * 在cookie中存token串的名字
      */
     public final static String JWT_TOKEN = "jwtToken";
+
+    /**
+     * caffeine 缓存名
+     */
+    public final static String CAFFEINE_CACHE_JURUA_SERVICE_NAME = "juruaServiceCache";
+
+    /**
+     * redisson map 实例名
+     */
+    public final static String REDISSON_MAP_INSTANCE_NAME = "users";
 }

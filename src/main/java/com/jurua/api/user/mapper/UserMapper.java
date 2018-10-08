@@ -1,11 +1,13 @@
 package com.jurua.api.user.mapper;
 
+import com.jurua.api.config.mybatis.Mapper;
 import com.jurua.api.user.model.User;
 import com.jurua.api.user.model.vo.UsersVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Long userId);
 

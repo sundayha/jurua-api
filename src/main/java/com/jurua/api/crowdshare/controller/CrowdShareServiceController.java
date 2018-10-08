@@ -12,9 +12,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -32,16 +34,17 @@ import static com.jurua.api.common.constants.ServiceConstants.CROWD_SHARE_EXPORT
 @Api(value = "群共享controller", description = "群共享")
 public class CrowdShareServiceController {
 
-    @Autowired
     private ICrowdShareService iCrowdShareService;
-    @Autowired
-    private HttpServletResponse httpServletResponse;
+
+    public CrowdShareServiceController(ICrowdShareService iCrowdShareService) {
+        this.iCrowdShareService = iCrowdShareService;
+    }
 
     @ApiOperation(value = "导出渔友出鱼excel", notes = "导出渔友出鱼excel")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/exportFishFriendsSellFishExcel", method = RequestMethod.GET)
     @ResponseBody
-    ResultApi exportFishfriendsSellFishExcel() throws Exception {
+    ResultApi exportFishfriendsSellFishExcel(HttpServletResponse httpServletResponse) throws Exception {
         try {
             ResultApi<String> resultApi = new ResultApi<>();
             Workbook workbook = iCrowdShareService.exportFishFriendsSellFishExcel();

@@ -7,9 +7,11 @@ import com.jurua.api.fishinfo.service.IFishLibService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.HttpURLConnection;
 import java.util.List;
@@ -22,8 +24,11 @@ import java.util.List;
 @Api(value = "鱼种类controller", description = "鱼种类")
 public class FishLibController {
 
-    @Autowired
     private IFishLibService iFishLibService;
+
+    public FishLibController(IFishLibService iFishLibService) {
+        this.iFishLibService = iFishLibService;
+    }
 
     @ApiOperation(value = "插入鱼种类数据", notes = "插入鱼种类数据")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)

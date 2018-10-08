@@ -14,7 +14,6 @@ import com.jurua.api.crowdshare.model.vo.ExportFishFriendsSellFishExcelVo;
 import com.jurua.api.crowdshare.model.vo.FishFriendsSellFishTableVO;
 import com.jurua.api.crowdshare.service.ICrowdShareService;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +27,11 @@ import static com.jurua.api.common.constants.ServiceConstants.CROWD_SHARE_EXPORT
 @Service
 public class CrowdShareServiceImpl implements ICrowdShareService {
 
-    @Autowired
     private FishBubbleMapper fishBubbleMapper;
+
+    public CrowdShareServiceImpl(FishBubbleMapper fishBubbleMapper) {
+        this.fishBubbleMapper = fishBubbleMapper;
+    }
 
     @Override
     public String loadExcel() {

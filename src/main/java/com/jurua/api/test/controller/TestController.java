@@ -4,7 +4,6 @@ import com.jurua.api.common.constants.StatusCode;
 import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
 import com.jurua.api.common.model.result.ResultApi;
-import com.jurua.api.config.jwt.JwtTokenUtil;
 import com.jurua.api.test.model.Test;
 import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
@@ -12,16 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.HttpURLConnection;
 
 
@@ -34,16 +26,11 @@ import java.net.HttpURLConnection;
 @Api(value = "测试controller", description = "测试测试")
 public class TestController {
 
-    @Autowired
     private ITestService iTestService;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private HttpServletRequest httpServletRequest;
-    @Autowired
-    private HttpServletResponse httpServletResponse;
-    @Autowired
-    private RedisTemplate redisTemplate;
+
+    public TestController(ITestService iTestService) {
+        this.iTestService = iTestService;
+    }
 
     @ApiOperation(value = "测试用", notes = "真的是测试用")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个string", response = ResultApi.class)
@@ -85,8 +72,6 @@ public class TestController {
     @ResponseBody
     public ResultApi findTestById(@ApiParam("查询条件") @RequestBody PagingInfo<TestQuery> pagingInfo) throws Exception {
         try {
-            String s = (String) redisTemplate.opsForValue().get(String.valueOf(httpServletRequest.getAttribute("uuid")));
-            System.out.println(s);
             ResultApi<PagingResult<Test, TestQuery>> resultApi = new ResultApi<>();
             resultApi.setData(iTestService.findTestById(pagingInfo));
             resultApi.setMessage(StatusCode.COMMON_OK.getMessage());
@@ -118,5 +103,71 @@ public class TestController {
     @RequestMapping(value = "/logOut", method = RequestMethod.POST)
     @ResponseBody
     public void logOut() {
+    }
+
+    @ApiOperation(value = "测试缓存插入", notes = "测试缓存插入")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/cacheData/{key}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultApi cacheData(@PathVariable String key) throws Exception {
+        ResultApi<String> resultApi = new ResultApi<>();
+        try {
+            //resultApi.setData(iTestService.findData(key));
+            resultApi.setData(iTestService.findDataAnnotation(key));
+            return resultApi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
+    //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    //@RequestMapping(value = "/getCacheData/{p}", method = RequestMethod.GET)
+    //@ResponseBody
+    //public String getCacheData(@PathVariable String p) {
+    //    return iTestService.getCacheData(p);
+    //}
+
+    //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
+    //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    //@RequestMapping(value = "/getAllCacheData", method = RequestMethod.GET)
+    //@ResponseBody
+    //public String getAllCacheData() {
+    //    return iTestService.getAllCacheData();
+    //}
+
+    @ApiOperation(value = "测试缓存删除", notes = "测试缓存删除")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/delCacheData/{key}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String delCacheData(@PathVariable String key) throws Exception {
+        //return iTestService.delData(key);
+        return iTestService.delDataAnnotation(key);
+    }
+
+    @ApiOperation(value = "测试缓存更新", notes = "测试缓存更新")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/updateCacheData/{key}", method = RequestMethod.PUT)
+    @ResponseBody
+    public String updateCacheData(@PathVariable String key) throws Exception {
+        //return iTestService.updateData(key);
+        return iTestService.updateDataAnnotation(key);
+    }
+
+    @ApiOperation(value = "测试 rabbitmq", notes = "测试 rabbitmq")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/rabbitMQT", method = RequestMethod.POST)
+    @ResponseBody
+    public String rabbitMQT() throws Exception {
+        return iTestService.rabbitMQT();
+    }
+
+    @ApiOperation(value = "测试 redissonTopic", notes = "测试 redissonTopic")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/redissonTopicT", method = RequestMethod.POST)
+    @ResponseBody
+    public String redissonTopicT() throws Exception {
+        return iTestService.redissonTopicT();
     }
 }

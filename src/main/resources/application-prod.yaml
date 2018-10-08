@@ -1,0 +1,22 @@
+application:
+  start: PROD
+jwt:
+  apiKey: keykeykey
+  exp: 1800
+  header: Authorization
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+server:
+  port: 8080
+  session:
+    timeout: 1800
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/jurua?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&autoReconnect=true
+    username: root
+management:
+  health:
+    redis:
+      enabled: false

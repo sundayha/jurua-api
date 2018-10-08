@@ -4,7 +4,6 @@ import com.jurua.api.common.model.page.PagingInfo;
 import com.jurua.api.common.model.page.PagingResult;
 import com.jurua.api.config.exception.service.TestServiceException;
 import com.jurua.api.test.model.Test;
-import com.jurua.api.test.model.User;
 import com.jurua.api.test.model.query.TestQuery;
 
 /**
@@ -24,5 +23,15 @@ public interface ITestService {
 
     PagingResult<Test, TestQuery> findTestById(PagingInfo<TestQuery> pagingInfo) throws TestServiceException;
 
-    User getUser(String userName) throws TestServiceException;
+    //User getUser(String userName) throws TestServiceException;
+
+    String findDataAnnotation(String key) throws TestServiceException;
+
+    String delDataAnnotation(String key) throws TestServiceException;
+
+    String updateDataAnnotation(String key) throws TestServiceException;
+
+    String rabbitMQT() throws TestServiceException;
+
+    String redissonTopicT() throws TestServiceException;
 }

@@ -2,9 +2,8 @@ package com.jurua.api.config.jwt;
 
 import com.jurua.api.common.constants.StatusCode;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
 
@@ -26,11 +25,17 @@ import static com.jurua.api.common.constants.SysConstants.*;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
+    private RedissonClient redissonClient;
     private JwtTokenUtil jwtTokenUtil;
-    // http请求时，header中的Authorization头
+
+    public JwtAuthenticationTokenFilter(RedissonClient redissonClient, JwtTokenUtil jwtTokenUtil) {
+        this.redissonClient = redissonClient;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
+
+    /**
+     * http请求时，header中的Authorization头
+     */
     @Value("${jwt.header}")
     private String authorization;
     @Value("${application.start}")
@@ -55,7 +60,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 登出
         if (StringUtils.contains(apiPath, LOGOUT)) {
             // 删除redis用户信息
-            redisTemplate.delete(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
+            redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).remove(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
+            //redisTemplate.delete(jwtTokenUtil.getUuidFromToken(jwtTokenUtil.getToken(request)));
             // 如果是dev清除cookie信息
             if (StringUtils.equals(applicationStart, APPLICATION_START_DEV)) {
                 Cookie cookie = WebUtils.getCookie(request, JWT_TOKEN);
@@ -71,7 +77,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 得到header中的令牌，取得uuid
         if (!StringUtils.isEmpty(token)) {
             // 验证该token是否在令牌黑名单中 || 验证该令牌是否超时、jwt串是否符合要求等等
-            if (redisTemplate.opsForSet().isMember(TOKEN_BLACK_LIST, token) || jwtTokenUtil.validateToken(token)) {
+            if (redissonClient.getMap("blackList").containsValue(token) || jwtTokenUtil.validateToken(token)) {
+            //if (redisTemplate.opsForSet().isMember(TOKEN_BLACK_LIST, token) || jwtTokenUtil.validateToken(token)) {
                 // 返回令牌失效
                 jwtTokenUtil.responseResult(response, StatusCode.TOKEN_INVALID);
                 return;
@@ -79,16 +86,17 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             // 校验通过后，取得令牌中的uuid
             uuid = jwtTokenUtil.getUuidFromToken(token);
             // 查看redis中是否存在与用户登陆时产生的值
-            if (StringUtils.isEmpty(uuid) || redisTemplate.opsForValue().get(uuid) == null) {
+            if (StringUtils.isEmpty(uuid) || redissonClient.getMap(REDISSON_MAP_INSTANCE_NAME).get(uuid) == null) {
+            //if (StringUtils.isEmpty(uuid) || redisTemplate.opsForValue().get(uuid) == null) {
                 // 返回会话过期（这里可能存在判断重复，token过期后这里访问不到，token刷新时，又会重置redis中的过期时间）
                 jwtTokenUtil.responseResult(response, StatusCode.SESSION_TIME_OUT);
                 return;
             }
             // 比较签名时的ip是否相同，如果不相同说明ip地址改变，token可能被劫持，需要重新登录（移动设备的IP经常换这点要注意）
-            if (!StringUtils.equals(jwtTokenUtil.getRequestIp(request), jwtTokenUtil.getIssuerFromToken(token))) {
-                jwtTokenUtil.responseResult(response, StatusCode.IP_EQUALS_ERROR);
-                return;
-            }
+            //if (!StringUtils.equals(jwtTokenUtil.getRequestIp(request), jwtTokenUtil.getIssuerFromToken(token))) {
+            //    jwtTokenUtil.responseResult(response, StatusCode.IP_EQUALS_ERROR);
+            //    return;
+            //}
             // 过滤所有api
             StatusCode statusCode = jwtTokenUtil.aboutPath(request, token);
             // 如果过滤有问题，返回相应的状态

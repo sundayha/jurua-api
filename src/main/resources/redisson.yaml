@@ -1,0 +1,64 @@
+clusterServersConfig:
+  # 空闲连接超时
+  idleConnectionTimeout: 10000
+  # ping 连接超时
+  pingTimeout: 1000
+  # 连接超时
+  connectTimeout: 10000
+  # redis server 响应超时
+  timeout: 3000
+  # 重复尝试。如果 redis 命令不能发送到 redis server 则触发 retryAttempts。或者如果发送成功了，但超过了 timeout（redis server 响应时间）则触发 retryAttempts
+  retryAttempts: 3
+  # 重复尝试时间间隔
+  retryInterval: 1500
+  #
+  failedSlaveReconnectionInterval: 3000
+  #
+  failedSlaveCheckInterval: 60000
+  # redis 密码
+  password: null
+  # 每个 redis 连接最大（发布、订阅）数
+  subscriptionsPerConnection: 5
+  # 客户端连接名
+  clientName: null
+  loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
+  # 在连接池中每个 slave 最小空闲（发布、订阅）可连接数
+  subscriptionConnectionMinimumIdleSize: 1
+  # 在连接池中每个 slave 最大（发布、订阅）可连接数
+  subscriptionConnectionPoolSize: 50
+  # 每个 slave 最小空闲连接数
+  slaveConnectionMinimumIdleSize: 32
+  # 每个 slave 最大连接数
+  slaveConnectionPoolSize: 64
+  # master 节点最小空闲连接数
+  masterConnectionMinimumIdleSize: 32
+  # master 节点最大连接数
+  masterConnectionPoolSize: 64
+  # 设置用于读操作的节点类型
+  readMode: "SLAVE"
+  # 设置用于订阅操作的节点类型
+  subscriptionMode: "SLAVE"
+  # redis 集群节点地址
+  nodeAddresses:
+  - "redis://192.168.1.12:7000"
+  - "redis://192.168.1.12:7001"
+  - "redis://192.168.1.12:7002"
+  - "redis://192.168.1.12:7003"
+  - "redis://192.168.1.12:7004"
+  - "redis://192.168.1.12:7005"
+  # redis 集群扫描间隔
+  scanInterval: 1000
+  # ping 连接时间间隔
+  pingConnectionInterval: 0
+  # 为链接启用 TCP keepAlive
+  keepAlive: false
+  # 为链接启用 TCP 无延迟
+  tcpNoDelay: false
+#
+threads: 0
+# Redisson 分享所有的 redis 客户端线程
+nettyThreads: 0
+# 编解码器
+codec: !<org.redisson.codec.JsonJacksonCodec> {}
+#
+transportMode: "NIO"

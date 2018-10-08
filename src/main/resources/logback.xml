@@ -3,10 +3,7 @@
 
   <!--在没有定义${LOG_HOME}系统变量的时候，可以设置此本地变量。提交测试、上线时，要将其注释掉，使用系统变量。-->
   <!--本地环境-->
-  <!--<property name="LOG_HOME" value="C:/logs"/>-->
-  <!-- 内测环境
-  <property name="LOG_HOME" value="/opt/logs" /> -->
-  <!--<property name="LOG_HOME" value="/data/llkj-logs/logs" />-->
+  <property name="LOG_HOME" value="/Users/zhangbo/Documents/IDEAWorkSpace/logs" />
 
 
   <!-- 应用名称：和统一配置中的项目代码保持一致（小写） -->
@@ -16,7 +13,7 @@
   <!--应用日志文件保存路径-->
   <property name="LOG_APP_HOME" value="${LOG_HOME}/${APP_NAME}/app"/>
   <!--系统日志文件保存路径-->
-  <property name="LOG_SYS_HOME" value="${LOG_HOME}/${APP_NAME}/sys"/>
+  <!--<property name="LOG_SYS_HOME" value="${LOG_HOME}/${APP_NAME}/sys"/>-->
 
   <!-- 控制台输出日志 -->
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -64,7 +61,6 @@
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="FRAME"/>
   </logger>
-
 
   <!-- framework logger，使用 FRAME -->
   <logger name="com.ibm.framework" level="info" additivity="false">

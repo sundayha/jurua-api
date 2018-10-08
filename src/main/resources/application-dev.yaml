@@ -1,0 +1,30 @@
+# 自定义属性
+application:
+  start: DEV
+jwt:
+  apiKey: keykeykey
+  exp: 1800
+  header: Authorization
+mybatis:
+  # mybatis mapper 位置
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+server:
+  # 服务器端口
+  port: 8081
+  session:
+  # session 超时
+    timeout: 1800
+spring:
+  datasource:
+    # jdbc 驱动
+    driver-class-name: com.mysql.jdbc.Driver
+    # 数据库密码
+    username: root
+    # 数据库 url
+    url: jdbc:mysql://localhost:3306/jurua-dev?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&autoReconnect=true
+    # 密码
+    password: root
+management:
+  health:
+    redis:
+      enabled: false
