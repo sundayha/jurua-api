@@ -154,4 +154,20 @@ public class TestController {
         //return iTestService.updateData(key);
         return iTestService.updateDataAnnotation(key);
     }
+
+    @ApiOperation(value = "测试 rabbitmq", notes = "测试 rabbitmq")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/rabbitMQT", method = RequestMethod.POST)
+    @ResponseBody
+    public String rabbitMQT() throws Exception {
+        return iTestService.rabbitMQT();
+    }
+
+    @ApiOperation(value = "测试 redissonTopic", notes = "测试 redissonTopic")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/redissonTopicT", method = RequestMethod.POST)
+    @ResponseBody
+    public String redissonTopicT() throws Exception {
+        return iTestService.redissonTopicT();
+    }
 }

@@ -5,7 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.jurua.api.common.utils.cache.broadcast.CacheMsgBroadcast;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
-import org.springframework.cache.caffeine.CaffeineCache;
+import org.springframework.cache.support.AbstractValueAdaptingCache;
 
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -16,14 +16,20 @@ import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_S
 /**
  * @author 张博【zhangb@lianliantech.cn】
  *
- * 继承 CaffeineCache，使用 redisson 实现2级缓存
+ * 继承 AbstractValueAdaptingCache，使用 redisson 实现2级缓存
  */
-public class RedisCaffeineCache extends CaffeineCache {
+public class RedisCaffeineCache extends AbstractValueAdaptingCache {
 
-    private com.github.benmanes.caffeine.cache.Cache<Object, Object> cache;
-
+    private static com.github.benmanes.caffeine.cache.Cache<Object, Object> cache;
     private RedissonClient redissonClient;
+    /**
+     * 缓存消息广播
+     */
     private CacheMsgBroadcast cacheMsgBroadcast;
+    /**
+     * 缓存名
+     */
+    private String name;
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
@@ -35,14 +41,19 @@ public class RedisCaffeineCache extends CaffeineCache {
      * @apiNote spring 注入
      */
     public RedisCaffeineCache(String name, Cache<Object, Object> cache, boolean allowNullValues, RedissonClient redissonClient, CacheMsgBroadcast cacheMsgBroadcast) {
-        super(name, cache, allowNullValues);
-        this.cache = cache;
+        super(allowNullValues);
+        RedisCaffeineCache.cache = cache;
+        this.name = name;
         this.redissonClient = redissonClient;
         this.cacheMsgBroadcast = cacheMsgBroadcast;
-        //this.t();
     }
 
-    private void t() {
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/8 1:05 PM
+     * @apiNote 测试 redisson 广播  
+     */
+    private void redissonBroadcast() {
         RTopic<Object> topic = redissonClient.getTopic("redissonTopic");
         //topic.
         topic.addListener((CharSequence channel, Object msg) -> {
@@ -51,9 +62,19 @@ public class RedisCaffeineCache extends CaffeineCache {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Object getNativeCache() {
+        return null;
+    }
+
+    @Override
     public ValueWrapper get(Object key) {
-        if (this.cache instanceof LoadingCache) {
-            Object value = ((LoadingCache<Object, Object>) this.cache).get(key);
+        if (cache instanceof LoadingCache) {
+            Object value = ((LoadingCache<Object, Object>) cache).get(key);
             return toValueWrapper(value);
         }
         return super.get(key);
@@ -61,12 +82,12 @@ public class RedisCaffeineCache extends CaffeineCache {
 
     @Override
     public <T> T get(Object key, final Callable<T> valueLoader) {
-        return (T) fromStoreValue(this.cache.get(key, new LoadFunction(valueLoader)));
+        return (T) fromStoreValue(cache.get(key, new LoadFunction(valueLoader)));
     }
 
     @Override
     protected Object lookup(Object key) {
-        Object value = this.cache.getIfPresent(key);
+        Object value = cache.getIfPresent(key);
         Object redisValue = null;
         if (Objects.isNull(value)) {
             redisValue = redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).get(key);
@@ -89,7 +110,7 @@ public class RedisCaffeineCache extends CaffeineCache {
      * @apiNote 只更新 caffeine 的缓存
      */
     private void putCaffeine(Object key, Object value) {
-        this.cache.put(key, toStoreValue(value));
+        cache.put(key, toStoreValue(value));
     }
 
     /**
@@ -106,18 +127,18 @@ public class RedisCaffeineCache extends CaffeineCache {
             if (!Objects.isNull(key) && !Objects.isNull(value)) {
                 redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).put(key, value);
             }
-            this.cache.put(key, toStoreValue(value));
+            cache.put(key, toStoreValue(value));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cacheMsgBroadcast.sentEvict(cache, (String) key);
+            cacheMsgBroadcast.sentEvict(cacheMsgBroadcast.getAddress(), (String) key);
         }
     }
 
     @Override
     public ValueWrapper putIfAbsent(Object key, final Object value) {
         PutIfAbsentFunction callable = new PutIfAbsentFunction(value);
-        Object result = this.cache.get(key, callable);
+        Object result = cache.get(key, callable);
         return (callable.called ? null : toValueWrapper(result));
     }
 
@@ -127,18 +148,18 @@ public class RedisCaffeineCache extends CaffeineCache {
             if (!Objects.isNull(key)) {
                 redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).remove(key);
             }
-            this.cache.invalidate(key);
+            cache.invalidate(key);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cacheMsgBroadcast.sentEvict(cache, (String) key);
+            cacheMsgBroadcast.sentEvict(cacheMsgBroadcast.getAddress(), (String) key);
         }
     }
 
     @Override
     public void clear() {
         redissonClient.getMap(CAFFEINE_CACHE_JURUA_SERVICE_NAME).readAllMap();
-        this.cache.invalidateAll();
+        cache.invalidateAll();
     }
 
     private class PutIfAbsentFunction implements Function<Object, Object> {
@@ -175,5 +196,24 @@ public class RedisCaffeineCache extends CaffeineCache {
                 throw new ValueRetrievalException(o, valueLoader, ex);
             }
         }
+    }
+
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/8 1:14 PM
+     * @param key 缓存 key 值
+     * @apiNote 用于广播清除一级缓存
+     */
+    public static void evict(String key) {
+        cache.invalidate(key);
+    }
+
+    /**
+     * 创建人：张博【zhangb@novadeep.com】
+     * 时间：2018/10/8 1:14 PM
+     * @apiNote 用于广播清除一级缓存
+     */
+    public static void clearAll() {
+        cache.invalidateAll();
     }
 }

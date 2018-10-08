@@ -1,5 +1,6 @@
 package com.jurua.api.common.utils.cache;
 
+import com.jurua.api.common.utils.cache.broadcast.CacheMsgBroadcast;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.Cache;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -12,9 +13,11 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 public class RedisCaffeineCacheManager extends CaffeineCacheManager {
 
     private RedissonClient redissonClient;
+    private CacheMsgBroadcast cacheMsgBroadcast;
 
-    public RedisCaffeineCacheManager(RedissonClient redissonClient) {
+    public RedisCaffeineCacheManager(RedissonClient redissonClient, CacheMsgBroadcast cacheMsgBroadcast) {
         this.redissonClient = redissonClient;
+        this.cacheMsgBroadcast = cacheMsgBroadcast;
     }
 
     /**
@@ -27,6 +30,6 @@ public class RedisCaffeineCacheManager extends CaffeineCacheManager {
     @Override
     protected Cache createCaffeineCache(String name) {
         // 返回一个自定义 redis caffeine 缓存实例
-        return new RedisCaffeineCache(name, createNativeCaffeineCache(name), isAllowNullValues(), redissonClient);
+        return new RedisCaffeineCache(name, createNativeCaffeineCache(name), isAllowNullValues(), redissonClient, cacheMsgBroadcast);
     }
 }

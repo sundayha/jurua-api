@@ -30,4 +30,8 @@ public interface ITestService {
     String delDataAnnotation(String key) throws TestServiceException;
 
     String updateDataAnnotation(String key) throws TestServiceException;
+
+    String rabbitMQT() throws TestServiceException;
+
+    String redissonTopicT() throws TestServiceException;
 }
