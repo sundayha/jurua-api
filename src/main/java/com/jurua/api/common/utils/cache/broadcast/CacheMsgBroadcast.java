@@ -35,41 +35,45 @@ public interface CacheMsgBroadcast {
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 11:28 AM
+     * @param cacheName 缓存名称
      * @param address app 地址标识
      * @param key 缓存 key 值
      * @apiNote 向集群发送消息，使当前 key 值的缓存失效
      */
-    default void sentEvict(String address, String key) {
-        broadcast(new MsgType(address, MsgType.EVENT, key));
+    default void sentEvict(String cacheName, String address, String key) {
+        broadcast(new MsgType(cacheName, address, MsgType.EVENT, key));
     }
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 12:55 PM
+     * @param cacheName 缓存名称
      * @param address app 地址标识
      * @apiNote  向集群发送消息，使一级缓存失效
      */
-    default void sentAllClear(String address) {
-        broadcast(new MsgType(address, MsgType.CLEAR));
+    default void sentAllClear(String cacheName, String address) {
+        broadcast(new MsgType(cacheName, address, MsgType.CLEAR));
     }
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 12:55 PM
+     * @param cacheName 缓存名称
      * @param key 缓存 key 值
      * @apiNote 使当前 key 值的缓存失效
      */
-    default void evict(String key) {
-        RedisCaffeineCache.evict(key);
+    default void evict(String cacheName, String key) {
+        RedisCaffeineCache.evict(cacheName, key);
     }
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 12:57 PM
+     * @param cacheName 缓存名称
      * @apiNote 使一级缓存失效
      */
-    default void allClear() {
-        RedisCaffeineCache.clearAll();
+    default void allClear(String cacheName) {
+        RedisCaffeineCache.allClear(cacheName);
     }
 
     /**
@@ -81,10 +85,10 @@ public interface CacheMsgBroadcast {
     default void switchMsg(MsgType msgType) {
         switch (msgType.msgType) {
             case MsgType.EVENT:
-                evict(msgType.key);
+                evict(msgType.cacheName, msgType.key);
                 break;
             case MsgType.CLEAR:
-                allClear();
+                allClear(msgType.cacheName);
                 break;
             default:
                 break;

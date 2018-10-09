@@ -121,6 +121,22 @@ public class TestController {
         }
     }
 
+    @ApiOperation(value = "测试缓存插入1", notes = "测试缓存插入1")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
+    @RequestMapping(value = "/cacheData1/{key}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultApi cacheData1(@PathVariable String key) throws Exception {
+        ResultApi<String> resultApi = new ResultApi<>();
+        try {
+            //resultApi.setData(iTestService.findData(key));
+            resultApi.setData(iTestService.findDataAnnotation1(key));
+            return resultApi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
     //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
     //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     //@RequestMapping(value = "/getCacheData/{p}", method = RequestMethod.GET)
