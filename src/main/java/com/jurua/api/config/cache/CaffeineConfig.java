@@ -13,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_SERVICE_NAME;
-
 /**
  * @author 张博【zhangb@lianliantech.cn】
  *
@@ -39,9 +37,9 @@ public class CaffeineConfig {
 
     @Bean
     public CacheManager caffeineCacheManager() {
-        final RedisCaffeineCacheManager manager = new RedisCaffeineCacheManager(redissonClient, cacheMsgBroadcast);
+        RedisCaffeineCacheManager manager = new RedisCaffeineCacheManager(redissonClient, cacheMsgBroadcast);
         manager.setCaffeine(caffeineBuilder());
-        manager.setCacheNames(Arrays.asList(CAFFEINE_CACHE_JURUA_SERVICE_NAME));
+        manager.setCacheNames(Arrays.asList("juruaServiceCache", "apiCache"));
         return manager;
     }
 

@@ -27,6 +27,8 @@ public interface ITestService {
 
     String findDataAnnotation(String key) throws TestServiceException;
 
+    String findDataAnnotation1(String key) throws TestServiceException;
+
     String delDataAnnotation(String key) throws TestServiceException;
 
     String updateDataAnnotation(String key) throws TestServiceException;

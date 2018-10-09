@@ -4,8 +4,9 @@ import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
+
+
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
@@ -29,6 +30,7 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
         connectionFactory.setPort(5672);
         connectionFactory.setUsername("guest");
         connectionFactory.setPassword("guest");
+        //this.cache = cache;
         connect();
     }
 

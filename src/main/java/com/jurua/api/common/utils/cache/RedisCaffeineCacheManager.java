@@ -30,6 +30,6 @@ public class RedisCaffeineCacheManager extends CaffeineCacheManager {
     @Override
     protected Cache createCaffeineCache(String name) {
         // 返回一个自定义 redis caffeine 缓存实例
-        return new RedisCaffeineCache(name, createNativeCaffeineCache(name), isAllowNullValues(), redissonClient, cacheMsgBroadcast);
+        return new RedisCaffeineCache(name, createNativeCaffeineCache(name), isAllowNullValues(), redissonClient, cacheMsgBroadcast, this);
     }
 }

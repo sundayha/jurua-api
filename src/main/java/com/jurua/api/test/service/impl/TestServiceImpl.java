@@ -11,13 +11,10 @@ import com.jurua.api.test.model.query.TestQuery;
 import com.jurua.api.test.service.ITestService;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_SERVICE_NAME;
 
 //import com.rabbitmq.client.Connection;
 
@@ -26,7 +23,7 @@ import static com.jurua.api.common.constants.SysConstants.CAFFEINE_CACHE_JURUA_S
  *
  */
 
-@CacheConfig(cacheNames = {CAFFEINE_CACHE_JURUA_SERVICE_NAME})
+//@CacheConfig(cacheNames = {CAFFEINE_CACHE_JURUA_SERVICE_NAME})
 @Service
 public class TestServiceImpl implements ITestService {
 
@@ -92,19 +89,25 @@ public class TestServiceImpl implements ITestService {
     //}
 
 
-    @Cacheable(key = "#key")
+    @Cacheable(cacheNames={"juruaServiceCache"}, key = "#key")
     @Override
     public String findDataAnnotation(String key) throws TestServiceException {
         return "数据库查询结果".concat(key);
     }
 
-    @CacheEvict(key = "#key")
+    @Cacheable(cacheNames={"apiCache"}, key = "#key")
+    @Override
+    public String findDataAnnotation1(String key) throws TestServiceException {
+        return "数据库查询结果 findDataAnnotation1 ".concat(key);
+    }
+
+    @CacheEvict(cacheNames={"apiCache"}, key = "#key")
     @Override
     public String delDataAnnotation(String key) throws TestServiceException {
         return "删除数据库结果".concat(key);
     }
 
-    @CachePut(key = "#key")
+    @CachePut(cacheNames={"juruaServiceCache"}, key = "#key")
     @Override
     public String updateDataAnnotation(String key) throws TestServiceException {
         return "更新数据库查询结果：狂操霍雨佳，操的她只喊爽我还要".concat(key);
