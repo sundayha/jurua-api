@@ -3,7 +3,10 @@ package com.jurua.api.common.utils.cache.broadcast;
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 
@@ -17,20 +20,30 @@ import java.io.IOException;
 public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
 
     private static final Logger log = LoggerFactory.getLogger(RabbitMQBroadcast.class);
-    private static final String EXCHANGE_NAME = "JURUA_API_RMQ_FANOUT";
-    private static final String EXCHANGE_TYPE = "fanout";
+    @Value("${rabbitmq.exchangeName}")
+    private String exchangeName;
+    @Value("${rabbitmq.exchangeType}")
+    private String exchangeType;
+    @Value("${rabbitmq.host}")
+    private String host;
+    @Value("${rabbitmq.port}")
+    private int port;
+    @Value("${rabbitmq.userName}")
+    private String userName;
+    @Value("${rabbitmq.password}")
+    private String password;
     private ConnectionFactory connectionFactory;
     private Connection producerConnection;
     private Channel producerChannel;
     private String consumerTag;
 
-    RabbitMQBroadcast() {
+    @PostConstruct
+    public void init() {
         connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("127.0.0.1");
-        connectionFactory.setPort(5672);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
-        //this.cache = cache;
+        connectionFactory.setHost(host);
+        connectionFactory.setPort(port);
+        connectionFactory.setUsername(userName);
+        connectionFactory.setPassword(password);
         connect();
     }
 
@@ -41,16 +54,16 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
         try {
             producerConnection = connectionFactory.newConnection();
             producerChannel = producerConnection.createChannel();
-            producerChannel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE);
+            producerChannel.exchangeDeclare(exchangeName, exchangeType);
 
             consumerConnection = connectionFactory.newConnection();
             consumerChannel = consumerConnection.createChannel();
-            consumerChannel.exchangeDeclare(EXCHANGE_NAME, EXCHANGE_TYPE);
+            consumerChannel.exchangeDeclare(exchangeName, exchangeType);
             String queueName = consumerChannel.queueDeclare().getQueue();
-            consumerChannel.queueBind(queueName, EXCHANGE_NAME, "");
+            consumerChannel.queueBind(queueName, exchangeName, "");
             consumerChannel.basicConsume(queueName, true, this);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("rabbitmq 链接异常", e);
         }
     }
 
@@ -71,7 +84,7 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
             }
         }
         try {
-            producerChannel.basicPublish(EXCHANGE_NAME, "", null, msg.toBytes());
+            producerChannel.basicPublish(exchangeName, "", null, msg.toBytes());
         } catch (Exception e) {
             log.error("RabbitMQ 发布消息异常", e);
         }

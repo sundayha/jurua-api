@@ -20,3 +20,10 @@ management:
   health:
     redis:
       enabled: false
+rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  userName: guest
+  password: guest
+  exchangeName: JURUA_API_RMQ_FANOUT
+  exchangeType: fanout
