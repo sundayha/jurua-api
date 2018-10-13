@@ -102,87 +102,71 @@ tcp-keepalive 300
 
 ################################# GENERAL #####################################
 
-# By default Redis does not run as a daemon. Use 'yes' if you need it.
-# Note that Redis will write a pid file in /usr/local/var/run/redis.pid when daemonized.
+
+# 默认 redis 不会开启守护进程，使用 yse 可以开启它。
+# 注意当开启守护进程后，redis 将编写一个 pid 文件 /usr/local/var/run/redis.pid
 daemonize no
 
-# If you run Redis from upstart or systemd, Redis can interact with your
-# supervision tree. Options:
-#   supervised no      - no supervision interaction
-#   supervised upstart - signal upstart by putting Redis into SIGSTOP mode
-#   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
-#   supervised auto    - detect upstart or systemd method based on
-#                        UPSTART_JOB or NOTIFY_SOCKET environment variables
-# Note: these supervision methods only signal "process is ready."
-#       They do not enable continuous liveness pings back to your supervisor.
+
+# 如果 redis 以 upstart 或者 systemd 运行，redis 能与 supervision 树相互作用。
+# 选项:
+#   supervised no      - 不互相监督
+#   supervised upstart - 将 redis 置于 SIGSTOP 模式
+#   supervised systemd - 将 READY=1 写入 $NOTIFY_SOCKET
+#   supervised auto    - 检测基于环境变量的 UPSTART_JOB 或者 NOTIFY_SOCKET，来确定 supervised 到底是 upstart 还是 systemd 模式
+
+# 注意: 这些监管方法只表示流程已经就绪。它们无法将连续的活跃度返回给 supervisor
 supervised no
 
-# If a pid file is specified, Redis writes it where specified at startup
-# and removes it at exit.
+# 如果指定了一个 pid 文件，redis 将其写入启动时指定的位置，在退出时移除该文件。
 #
-# When the server runs non daemonized, no pid file is created if none is
-# specified in the configuration. When the server is daemonized, the pid file
-# is used even if not specified, defaulting to "/usr/local/var/run/redis.pid".
+# 当服务启于无 daemonized 状态，将没有 pid 文件生成，该配置不会生效。
+# 当服务启于有 daemonized 状态，pid 文件即使没有被指定也会被使用，默认为 "/usr/local/var/run/redis.pid"
 #
-# Creating a pid file is best effort: if Redis is not able to create it
-# nothing bad happens, the server will start and run normally.
 pidfile /var/run/redis_6379.pid
 
-# Specify the server verbosity level.
-# This can be one of:
-# debug (a lot of information, useful for development/testing)
-# verbose (many rarely useful info, but not a mess like the debug level)
-# notice (moderately verbose, what you want in production probably)
-# warning (only very important / critical messages are logged)
+# 指定服务器详细级别。
+# 可以选择以下之一:
+# debug 开发或者测试模式
+# verbose debug 模式
+# notice 生产模式
+# warning 只记录非常重要或者详细的日志
 loglevel notice
 
-# Specify the log file name. Also the empty string can be used to force
-# Redis to log on the standard output. Note that if you use standard
-# output for logging but daemonize, logs will be sent to /dev/null
+# 指定日志文件名。也可以用空字符串。注意，如果你使用标准的日志输出但是 daemonize，日志将会被发送到 /dev/null
 logfile ""
 
-# To enable logging to the system logger, just set 'syslog-enabled' to yes,
-# and optionally update the other syslog parameters to suit your needs.
+# 启动记录日志到系统日志器，'syslog-enabled' to yes
 # syslog-enabled no
 
-# Specify the syslog identity.
+# 指定 syslog 的 id。
 # syslog-ident redis
 
-# Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
+# 指定 syslog 工具。必须是 USER 或者 LOCAL0-LOCAL7 之间。
 # syslog-facility local0
 
-# Set the number of databases. The default database is DB 0, you can select
-# a different one on a per-connection basis using SELECT <dbid> where
-# dbid is a number between 0 and 'databases'-1
+# 设置数据库个数。
 databases 16
 
-# By default Redis shows an ASCII art logo only when started to log to the
-# standard output and if the standard output is a TTY. Basically this means
-# that normally a logo is displayed only in interactive sessions.
-#
-# However it is possible to force the pre-4.0 behavior and always show a
-# ASCII art logo in startup logs by setting the following option to yes.
+# logo 显示
 always-show-logo yes
 
 ################################ SNAPSHOTTING  ################################
 #
-# Save the DB on disk:
+# 保存 DB 到 disk:
 #
 #   save <seconds> <changes>
 #
-#   Will save the DB if both the given number of seconds and the given
-#   number of write operations against the DB occurred.
+#   如果到达了给定的秒数和操作改变次数，将保存 DB。
 #
-#   In the example below the behaviour will be to save:
-#   after 900 sec (15 min) if at least 1 key changed
-#   after 300 sec (5 min) if at least 10 keys changed
-#   after 60 sec if at least 10000 keys changed
+#   下面的几种例子将会保存 DB:
+#   如果至少有1个 key 改变，那么数据库将在900秒（15分钟）后保存
+#   如果至少有个10个 key 改变，那么数据库将在300秒（15分钟）后保存
+#   如果至少有10000 key 改变，那么数据库将在60秒后保存
 #
-#   Note: you can disable saving completely by commenting out all "save" lines.
+#   注意: 你可以通过注释 save 选项，来禁用保存选项。
 #
-#   It is also possible to remove all the previously configured save
-#   points by adding a save directive with a single empty string argument
-#   like in the following example:
+#   也可以使用一个空字符来禁用 save 选项例如:
 #
 #   save ""
 
@@ -190,47 +174,28 @@ save 900 1
 save 300 10
 save 60 10000
 
-# By default Redis will stop accepting writes if RDB snapshots are enabled
-# (at least one save point) and the latest background save failed.
-# This will make the user aware (in a hard way) that data is not persisting
-# on disk properly, otherwise chances are that no one will notice and some
-# disaster will happen.
+# 默认下，如果启用了 RDB 快照，redis 将停止接受写入（至少一个保存点）和最新的后台保存失败。
 #
-# If the background saving process will start working again Redis will
-# automatically allow writes again.
+# 如果后台保存处理又工作了，redis 将自动再次允许写入
 #
-# However if you have setup your proper monitoring of the Redis server
-# and persistence, you may want to disable this feature so that Redis will
-# continue to work as usual even if there are problems with disk,
-# permissions, and so forth.
+# 如果你设置了正确的 redis server 监视器和持久性，你可能想禁用了该特性，即使后台保存出了毛病，redis 也将继续工作。
 stop-writes-on-bgsave-error yes
 
-# Compress string objects using LZF when dump .rdb databases?
-# For default that's set to 'yes' as it's almost always a win.
-# If you want to save some CPU in the saving child set it to 'no' but
-# the dataset will likely be bigger if you have compressible values or keys.
+# 当 dump .rdb 数据库时，是否采用 LZF 压缩字符串对象？
 rdbcompression yes
 
-# Since version 5 of RDB a CRC64 checksum is placed at the end of the file.
-# This makes the format more resistant to corruption but there is a performance
-# hit to pay (around 10%) when saving and loading RDB files, so you can disable it
-# for maximum performances.
-#
-# RDB files created with checksum disabled have a checksum of zero that will
-# tell the loading code to skip the check.
+# 使用校验和创建的 RDB 文件的校验和为零告诉加载代码跳过检查。
 rdbchecksum yes
 
-# The filename where to dump the DB
+# dump 数据库时的名字
 dbfilename dump.rdb
 
-# The working directory.
+# 工作目录。
 #
-# The DB will be written inside this directory, with the filename specified
-# above using the 'dbfilename' configuration directive.
+# 导出的数据库文件将会被写入到该目录内
 #
-# The Append Only File will also be created inside this directory.
 #
-# Note that you must specify a directory here, not a file name.
+# 注意这里必须是要指定一个目录而不是文件名。
 dir /usr/local/var/db/redis/
 
 ################################# REPLICATION #################################
