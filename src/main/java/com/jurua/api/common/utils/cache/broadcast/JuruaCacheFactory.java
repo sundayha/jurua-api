@@ -1,5 +1,7 @@
 package com.jurua.api.common.utils.cache.broadcast;
 
+import org.redisson.api.RedissonClient;
+
 /**
  * @author 张博【zhangb@lianliantech.cn】
  *
@@ -9,14 +11,17 @@ package com.jurua.api.common.utils.cache.broadcast;
  */
 public class JuruaCacheFactory<I> {
 
-    @SuppressWarnings("unchecked")
-    public <T> T newInstance(Class<T> tClass) {
-        I i = null;
+    public <T extends I> T newInstance(Class<T> tClass, RedissonClient redissonClient, String type) {
+        T t = null;
         try {
-            i = (I) Class.forName(tClass.getName()).newInstance();
+            if ("redisson".equals(type)) {
+                t = tClass.cast(Class.forName(tClass.getName()).getConstructor(RedissonClient.class).newInstance(redissonClient));
+            } else {
+                t = tClass.cast(Class.forName(tClass.getName()).getConstructor().newInstance());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (T) i;
+        return t;
     }
 }
