@@ -13,7 +13,7 @@ public class JuruaCacheFactory<I> {
     public <T> T newInstance(Class<T> tClass) {
         I i = null;
         try {
-            i = (I) Class.forName(tClass.getName()).newInstance();
+            i = (I) Class.forName(tClass.getName()).getConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

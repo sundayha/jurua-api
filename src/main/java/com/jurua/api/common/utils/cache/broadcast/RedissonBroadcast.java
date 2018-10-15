@@ -4,7 +4,6 @@ import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.UUID;
@@ -16,15 +15,18 @@ public class RedissonBroadcast implements CacheMsgBroadcast {
 
     private static final Logger log = LoggerFactory.getLogger(RedissonBroadcast.class);
 
-    @Autowired
     private RedissonClient redissonClient;
 
     private String uuid;
 
+    public RedissonBroadcast(RedissonClient redissonClient) {
+        this.redissonClient = redissonClient;
+        uuid = UUID.randomUUID().toString();
+    }
+
     @PostConstruct
     @Override
     public void connect() {
-        uuid = UUID.randomUUID().toString();
         redissonBroadcastReceive();
     }
 
