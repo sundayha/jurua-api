@@ -4,7 +4,6 @@ import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.io.IOException;
  *
  * RabbitMQ 广播实现
  */
-@Component
+//@Component
 public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
 
     private static final Logger log = LoggerFactory.getLogger(RabbitMQBroadcast.class);
@@ -38,20 +37,16 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
     private String consumerTag;
 
     @PostConstruct
-    public void init() {
-        connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(host);
-        connectionFactory.setPort(port);
-        connectionFactory.setUsername(userName);
-        connectionFactory.setPassword(password);
-        connect();
-    }
-
     @Override
     public void connect() {
         Connection consumerConnection;
         Channel consumerChannel;
         try {
+            connectionFactory = new ConnectionFactory();
+            connectionFactory.setHost(host);
+            connectionFactory.setPort(port);
+            connectionFactory.setUsername(userName);
+            connectionFactory.setPassword(password);
             producerConnection = connectionFactory.newConnection();
             producerChannel = producerConnection.createChannel();
             producerChannel.exchangeDeclare(exchangeName, exchangeType);
@@ -91,7 +86,7 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
     }
 
     @Override
-    public String getAddress() {
+    public String getNetIdentity() {
         return consumerTag;
     }
 
@@ -120,7 +115,7 @@ public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
     public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
         MsgType msgType = MsgType.toObject(body);
         // 不接收自己发布的信息
-        if (!msgType.address.equals(consumerTag)) {
+        if (!msgType.netIdentity.equals(consumerTag)) {
             switchMsg(MsgType.toObject(body));
         }
     }
