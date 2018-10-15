@@ -19,6 +19,7 @@ public class InitCache {
     @Bean
     public CacheMsgBroadcast initCaches() {
         JuruaCacheFactory<CacheMsgBroadcast> cacheFactory = new JuruaCacheFactory<>();
-        return  cacheFactory.newInstance(RabbitMQBroadcast.class);
+        //return  cacheFactory.newInstance(RedissonBroadcast.class, redissonClient, "redisson");
+        return  cacheFactory.newInstance(RabbitMQBroadcast.class, null, "");
     }
 }
