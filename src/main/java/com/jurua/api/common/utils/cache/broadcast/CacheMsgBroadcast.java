@@ -30,7 +30,7 @@ public interface CacheMsgBroadcast {
      * @apiNote 标识网络中发广播的机器
      * @return String
      */
-    String getAddress();
+    String getNetIdentity();
 
     /**
      * 创建人：张博【zhangb@novadeep.com】

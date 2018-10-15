@@ -36,3 +36,4 @@ rabbitmq:
   exchangeName: JURUA_API_RMQ_FANOUT
   exchangeType: fanout
 
+

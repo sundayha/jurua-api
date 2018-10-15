@@ -2,7 +2,6 @@ package com.jurua.api.config.cache;
 
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.context.annotation.Bean;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +15,7 @@ public class AsyncCaffeineConfig {
         return new CompletableFuture();
     }
 
-    @Bean("asyncCaffeine")
+    //@Bean("asyncCaffeine")
     public AsyncLoadingCache<Object, Object> AsyncCaffeine() {
         return Caffeine.newBuilder()
                 .maximumSize(10_000)

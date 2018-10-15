@@ -3,7 +3,6 @@ package com.jurua.api.common.utils.cache;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.jurua.api.common.utils.cache.broadcast.CacheMsgBroadcast;
-import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
@@ -50,19 +49,6 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
         this.redissonClient = redissonClient;
         this.cacheMsgBroadcast = cacheMsgBroadcast;
         RedisCaffeineCache.cacheManager = cacheManager;
-    }
-
-    /**
-     * 创建人：张博【zhangb@novadeep.com】
-     * 时间：2018/10/8 1:05 PM
-     * @apiNote 测试 redisson 广播  
-     */
-    private void redissonBroadcast() {
-        RTopic<Object> topic = redissonClient.getTopic("redissonTopic");
-        //topic.
-        topic.addListener((CharSequence channel, Object msg) -> {
-            System.out.println(msg);
-        });
     }
 
     @Override
@@ -135,7 +121,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getAddress(), (String) key);
+            cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getNetIdentity(), (String) key);
         }
     }
 
@@ -156,7 +142,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getAddress(), (String) key);
+            cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getNetIdentity(), (String) key);
         }
     }
 

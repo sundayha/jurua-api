@@ -32,7 +32,7 @@ public class MsgType {
     /**
      * app 地址标识
      */
-    public String address;
+    public String netIdentity;
 
     /**
      * 缓存名，表示某个方法调用的返回结果存储在指定的缓存名下
@@ -43,13 +43,13 @@ public class MsgType {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 10:21 AM
      * @param cacheName 缓存名
-     * @param address app 地址标识
+     * @param netIdentity app 地址标识
      * @param msgType 消息类型
      * @apiNote MsgType 构造函数
      */
-    MsgType(String cacheName, String address, int msgType) {
+    MsgType(String cacheName, String netIdentity, int msgType) {
         this.cacheName = cacheName;
-        this.address = address;
+        this.netIdentity = netIdentity;
         this.msgType = msgType;
     }
 
@@ -57,14 +57,14 @@ public class MsgType {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 10:21 AM
      * @param cacheName 缓存名
-     * @param address app 地址标识
+     * @param netIdentity app 地址标识
      * @param msgType 消息类型
      * @param key 缓存 key 值
      * @apiNote MsgType 构造函数
      */
-    MsgType(String cacheName, String address, int msgType, String key) {
+    MsgType(String cacheName, String netIdentity, int msgType, String key) {
         this.cacheName = cacheName;
-        this.address = address;
+        this.netIdentity = netIdentity;
         this.msgType = msgType;
         this.key = key;
     }
