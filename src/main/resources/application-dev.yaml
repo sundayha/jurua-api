@@ -1,6 +1,8 @@
 # 自定义属性
 application:
   start: DEV
+  # 采用 redisson 进行通知集群中一级缓存的清空工作
+  broadcast: redissonNotice
 jwt:
   apiKey: keykeykey
   exp: 1800

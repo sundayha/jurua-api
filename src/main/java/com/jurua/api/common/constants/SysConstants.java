@@ -59,4 +59,9 @@ public class SysConstants {
      * redisson map 实例名
      */
     public final static String REDISSON_MAP_INSTANCE_NAME = "users";
+
+    /**
+     * 启用 redisson 进行广播通知
+     */
+    public final static String REDISSON_NOTICE = "redissonNotice";
 }
