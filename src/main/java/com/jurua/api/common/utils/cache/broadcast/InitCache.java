@@ -30,7 +30,7 @@ public class InitCache {
         if (REDISSON_NOTICE.equals(broadcast)) {
             return  cacheFactory.newInstance(RedissonBroadcast.class, redissonClient, REDISSON_NOTICE);
         } else {
-            return  cacheFactory.newInstance(RabbitMQBroadcast.class, null, "");
+            return  cacheFactory.newInstance(RabbitMQBroadcast.class);
         }
     }
 }

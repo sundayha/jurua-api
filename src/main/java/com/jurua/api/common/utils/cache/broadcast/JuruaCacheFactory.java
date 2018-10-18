@@ -13,6 +13,10 @@ import static com.jurua.api.common.constants.SysConstants.REDISSON_NOTICE;
  */
 public class JuruaCacheFactory<I> {
 
+    public <T extends I> T newInstance(Class<T> tClass) {
+        return newInstance(tClass, null, "");
+    }
+
     public <T extends I> T newInstance(Class<T> tClass, RedissonClient redissonClient, String type) {
         T t = null;
         try {
