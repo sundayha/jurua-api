@@ -20,7 +20,7 @@ public interface CacheMsgBroadcast {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/5 4:58 PM
      * @param msg 消息对象
-     * @apiNote 广播发送消息
+     * @apiNote 委派模式，具体实现调用其实现类方法。广播发送消息
      */
     void broadcast(MsgType msg);
 
@@ -38,7 +38,7 @@ public interface CacheMsgBroadcast {
      * @param cacheName 缓存名称
      * @param address app 地址标识
      * @param key 缓存 key 值
-     * @apiNote 向集群发送消息，使当前 key 值的缓存失效
+     * @apiNote 向集群发送消息，使一级缓存失效
      */
     default void sentEvict(String cacheName, String address, String key) {
         broadcast(new MsgType(cacheName, address, MsgType.EVENT, key));
