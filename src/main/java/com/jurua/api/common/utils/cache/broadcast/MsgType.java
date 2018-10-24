@@ -39,6 +39,8 @@ public class MsgType {
      */
     public String cacheName;
 
+    public MsgType() {}
+
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 10:21 AM

@@ -15,7 +15,6 @@ import java.io.IOException;
  *
  * RabbitMQ 广播实现
  */
-//@Component
 public class RabbitMQBroadcast implements CacheMsgBroadcast, Consumer {
 
     private static final Logger log = LoggerFactory.getLogger(RabbitMQBroadcast.class);
