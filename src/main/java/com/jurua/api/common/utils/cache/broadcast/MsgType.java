@@ -30,7 +30,7 @@ public class MsgType {
     public String key;
 
     /**
-     * app 地址标识
+     * app 地址标识，集群中唯一标识
      */
     public String netIdentity;
 
@@ -39,6 +39,11 @@ public class MsgType {
      */
     public String cacheName;
 
+    /**
+     * 创建人：张博 [zhangb@novadeep.com]
+     * 时间：2018/10/25 4:03 PM
+     * @apiNote 创建默认构造器，否则序列化时会报错
+     */
     public MsgType() {}
 
     /**
@@ -71,11 +76,24 @@ public class MsgType {
         this.key = key;
     }
 
+    /**
+     * 创建人：张博 [zhangb@novadeep.com]
+     * 时间：2018/10/25 4:31 PM
+     * @apiNote 将该当前 MsgType 对象转换成字节数组
+     * @return byte[]
+     */
     public byte[] toBytes() {
         Gson gson = new Gson();
         return gson.toJson(this).getBytes();
     }
 
+    /**
+     * 创建人：张博 [zhangb@novadeep.com]
+     * 时间：2018/10/25 4:32 PM
+     * @param bytes MsgType 对象的字节数组
+     * @apiNote 把 MsgType 对象的字节数组转换为 MsgType 对象
+     * @return MsgType
+     */
     public static MsgType toObject(byte[] bytes) {
         Gson gson = new Gson();
         return gson.fromJson(new String(bytes), MsgType.class);

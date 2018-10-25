@@ -10,6 +10,8 @@ import java.util.UUID;
 
 /**
  * @author 张博 [zhangb@novadeep.com]
+ *
+ * redisson 广播实现
  */
 public class RedissonBroadcast implements CacheMsgBroadcast {
 

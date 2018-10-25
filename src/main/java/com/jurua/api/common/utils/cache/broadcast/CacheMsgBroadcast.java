@@ -36,23 +36,23 @@ public interface CacheMsgBroadcast {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 11:28 AM
      * @param cacheName 缓存名称
-     * @param address app 地址标识
+     * @param netIdentity app 地址标识
      * @param key 缓存 key 值
      * @apiNote 委派，向集群发送消息，使一级缓存失效
      */
-    default void sentEvict(String cacheName, String address, String key) {
-        broadcast(new MsgType(cacheName, address, MsgType.EVENT, key));
+    default void sentEvict(String cacheName, String netIdentity, String key) {
+        broadcast(new MsgType(cacheName, netIdentity, MsgType.EVENT, key));
     }
 
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 12:55 PM
      * @param cacheName 缓存名称
-     * @param address app 地址标识
+     * @param netIdentity app 地址标识
      * @apiNote 委派，向集群发送消息，使一级缓存失效
      */
-    default void sentAllClear(String cacheName, String address) {
-        broadcast(new MsgType(cacheName, address, MsgType.CLEAR));
+    default void sentAllClear(String cacheName, String netIdentity) {
+        broadcast(new MsgType(cacheName, netIdentity, MsgType.CLEAR));
     }
 
     /**
@@ -60,7 +60,7 @@ public interface CacheMsgBroadcast {
      * 时间：2018/10/8 12:55 PM
      * @param cacheName 缓存名称
      * @param key 缓存 key 值
-     * @apiNote 使当前 key 值的缓存失效
+     * @apiNote 使当前 key 值的缓存失效(升级到 jdk 8以上降此方法定义为私有)
      */
     default void evict(String cacheName, String key) {
         RedisCaffeineCache.evict(cacheName, key);
@@ -70,7 +70,7 @@ public interface CacheMsgBroadcast {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 12:57 PM
      * @param cacheName 缓存名称
-     * @apiNote 使一级缓存失效
+     * @apiNote 使一级缓存失效（升级到 jdk 8以上降此方法定义为私有）
      */
     default void allClear(String cacheName) {
         RedisCaffeineCache.allClear(cacheName);

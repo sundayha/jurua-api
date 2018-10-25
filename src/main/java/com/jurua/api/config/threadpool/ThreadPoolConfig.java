@@ -30,6 +30,6 @@ public class ThreadPoolConfig implements AsyncConfigurer {
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return new MyAsyncUncaughtExceptionHandler();
+        return new JuruaAsyncUncaughtExceptionHandler();
     }
 }

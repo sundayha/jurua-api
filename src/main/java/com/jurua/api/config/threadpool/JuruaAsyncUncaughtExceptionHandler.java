@@ -9,9 +9,9 @@ import java.lang.reflect.Method;
 /**
  * @author 张博 [zhangb@novadeep.com]
  */
-public class MyAsyncUncaughtExceptionHandler implements AsyncUncaughtExceptionHandler {
+public class JuruaAsyncUncaughtExceptionHandler implements AsyncUncaughtExceptionHandler {
 
-    private final Log logger = LogFactory.getLog(MyAsyncUncaughtExceptionHandler.class);
+    private final Log logger = LogFactory.getLog(JuruaAsyncUncaughtExceptionHandler.class);
 
     @Override
     public void handleUncaughtException(Throwable ex, Method method, Object... params) {
