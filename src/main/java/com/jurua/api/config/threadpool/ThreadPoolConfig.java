@@ -24,7 +24,7 @@ public class ThreadPoolConfig implements AsyncConfigurer {
         taskExecutor.setThreadNamePrefix("my thread name ---> ");
         taskExecutor.setQueueCapacity(500);
         taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
-        taskExecutor.setAwaitTerminationSeconds(1000);
+        taskExecutor.setAwaitTerminationSeconds(1800);
         return taskExecutor;
     }
 
