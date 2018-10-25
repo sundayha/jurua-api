@@ -28,7 +28,8 @@ public class CaffeineConfig {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/9/26 下午5:35
      * @param redissonClient redisson 客户端
-     * @apiNote 在该类注入 redissonClient
+     * @param cacheMsgBroadcast 一级缓存剔除广播
+     * @apiNote 在该类注入 redissonClient cacheMsgBroadcast
      */
     public CaffeineConfig(RedissonClient redissonClient, CacheMsgBroadcast cacheMsgBroadcast) {
         this.redissonClient = redissonClient;
@@ -37,6 +38,7 @@ public class CaffeineConfig {
 
     @Bean
     public CacheManager caffeineCacheManager() {
+        // 使用自定义的 CacheManager
         RedisCaffeineCacheManager manager = new RedisCaffeineCacheManager(redissonClient, cacheMsgBroadcast);
         manager.setCaffeine(caffeineBuilder());
         manager.setCacheNames(Arrays.asList("juruaServiceCache", "apiCache"));
@@ -45,13 +47,18 @@ public class CaffeineConfig {
 
     private Caffeine<Object, Object> caffeineBuilder() {
         return Caffeine.newBuilder()
+                // 访问后7天过期，期间再次访问，则过期时间刷新
                 .expireAfterWrite(7, TimeUnit.DAYS)
+                // 初始容量
                 .initialCapacity(100)
+                // 最大容量
                 .maximumSize(1000)
+                // 缓存移除监听器
                 .removalListener(
                         (Object key, Object value, RemovalCause cause) ->
                                 System.out.println("caffeineCacheManager -> 移除键" + key + "值：" + value)
                 )
+                // 记录缓存状态
                 .recordStats();
     }
 
@@ -59,20 +66,4 @@ public class CaffeineConfig {
     public Cache cache() {
         return caffeineBuilder().build();
     }
-
-    //@Bean
-    //public Cache cache() {
-    //    return Caffeine.newBuilder()
-    //            // 访问后7天过期，期间再次访问，则过期时间刷新
-    //            .expireAfterAccess(7, TimeUnit.DAYS)
-    //            // 初始容量
-    //            .initialCapacity(100)
-    //            // 最大缓存数
-    //            .maximumSize(1000)
-    //            // 监听值更新或移除
-    //            .removalListener((Object key, Object value, RemovalCause cause) -> System.out.println("caffeineCache -> 移除键：" + key + " 对应值值：" + value))
-    //            // 启用操作缓存期间的记录
-    //            .recordStats()
-    //            .build();
-    //}
 }

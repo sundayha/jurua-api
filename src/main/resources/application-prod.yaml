@@ -1,5 +1,7 @@
 application:
   start: PROD
+  # 采用 redisson 进行通知集群中一级缓存的清空工作，或者使用 rabbitmqNotice，将采用 rabbitmq 进行通知集群中一级缓存的清空工作
+  broadcast: redissonNotice
 jwt:
   apiKey: keykeykey
   exp: 1800
@@ -20,6 +22,8 @@ management:
   health:
     redis:
       enabled: false
+    rabbit:
+        enabled: false
 rabbitmq:
   host: 127.0.0.1
   port: 5672

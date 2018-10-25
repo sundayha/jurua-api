@@ -186,4 +186,13 @@ public class TestController {
     public String redissonTopicT() throws Exception {
         return iTestService.redissonTopicT();
     }
+
+    @ApiOperation(value = "测试 tAsync", notes = "测试 tAsync")
+    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "无返回值")
+    @RequestMapping(value = "/tAsync", method = RequestMethod.POST)
+    @ResponseBody
+    public void tAsync() throws Exception {
+        iTestService.tAsync();
+    }
+
 }

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @author 张博【zhangb@lianliantech.cn】
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication(scanBasePackages = "com.jurua.api")
 @EnableCaching
+@EnableAsync
 public class JuruaApiApplication extends SpringBootServletInitializer {
 
 	/**

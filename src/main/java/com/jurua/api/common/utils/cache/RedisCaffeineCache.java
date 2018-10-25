@@ -121,6 +121,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // 通知集群中的服务，使它们对应 key 的一级缓存失效
             cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getNetIdentity(), (String) key);
         }
     }
@@ -142,14 +143,23 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // 通知集群中的服务，使它们对应 key 的一级缓存失效
             cacheMsgBroadcast.sentEvict(getName(), cacheMsgBroadcast.getNetIdentity(), (String) key);
         }
     }
 
     @Override
     public void clear() {
-        redissonClient.getMap(getName()).readAllMap();
-        cache.invalidateAll();
+        try {
+            redissonClient.getMap(getName()).readAllMap();
+            cache.invalidateAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 通知集群中的服务，使它们一级缓存全部失效
+            cacheMsgBroadcast.sentAllClear(getName(), cacheMsgBroadcast.getNetIdentity());
+        }
+
     }
 
     private class PutIfAbsentFunction implements Function<Object, Object> {
@@ -192,7 +202,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 1:14 PM
      * @param key 缓存 key 值
-     * @apiNote 用于广播清除一级缓存
+     * @apiNote 接收来自其它集群中服务的通知后，用于广播清除一级缓存
      */
     public static void evict(String cacheName, String key) {
         RedisCaffeineCache redisCaffeineCache = (RedisCaffeineCache)cacheManager.getCache(cacheName);
@@ -202,7 +212,7 @@ public class RedisCaffeineCache extends AbstractValueAdaptingCache {
     /**
      * 创建人：张博【zhangb@novadeep.com】
      * 时间：2018/10/8 1:14 PM
-     * @apiNote 用于广播清除一级缓存
+     * @apiNote 接收来自其它集群中服务的通知后，用于广播清除一级缓存
      */
     public static void allClear(String cacheName) {
         RedisCaffeineCache redisCaffeineCache = (RedisCaffeineCache)cacheManager.getCache(cacheName);

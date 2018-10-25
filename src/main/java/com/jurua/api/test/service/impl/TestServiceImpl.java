@@ -16,6 +16,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.IntStream;
+
 //import com.rabbitmq.client.Connection;
 
 /**
@@ -29,6 +31,7 @@ public class TestServiceImpl implements ITestService {
 
     private TestMapper testMapper;
     private RedissonClient redissonClient;
+    private TestAsync testAsync;
     //private RabbitTemplate rabbitTemplate;
     //private DirectExchange directExchange;
     //private FanoutExchange fanoutExchange;
@@ -36,9 +39,10 @@ public class TestServiceImpl implements ITestService {
     //private ConnectionFactory connectionFactory;
     //private Cache cache;
 
-    public TestServiceImpl(TestMapper testMapper, RedissonClient redissonClient) {
+    public TestServiceImpl(TestMapper testMapper, RedissonClient redissonClient, TestAsync testAsync) {
         this.testMapper = testMapper;
         this.redissonClient = redissonClient;
+        this.testAsync = testAsync;
         //this.rabbitTemplate = rabbitTemplate;
         //this.directExchange = directExchange;
         //this.fanoutExchange = fanoutExchange;
@@ -130,5 +134,14 @@ public class TestServiceImpl implements ITestService {
         RTopic<Object> rTopic = redissonClient.getTopic("redissonTopic");
         rTopic.publish("远程狂操霍雨佳的小逼");
         return null;
+    }
+
+    @Override
+    public void tAsync() {
+        IntStream.range(0, 100).forEach(
+                i -> {
+                    testAsync.go(i);
+                }
+        );
     }
 }

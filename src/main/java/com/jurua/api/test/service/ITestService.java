@@ -36,4 +36,6 @@ public interface ITestService {
     String rabbitMQT() throws TestServiceException;
 
     String redissonTopicT() throws TestServiceException;
+
+    void tAsync();
 }
