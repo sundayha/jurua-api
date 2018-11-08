@@ -32,22 +32,11 @@ public class TestServiceImpl implements ITestService {
     private TestMapper testMapper;
     private RedissonClient redissonClient;
     private TestAsync testAsync;
-    //private RabbitTemplate rabbitTemplate;
-    //private DirectExchange directExchange;
-    //private FanoutExchange fanoutExchange;
-
-    //private ConnectionFactory connectionFactory;
-    //private Cache cache;
 
     public TestServiceImpl(TestMapper testMapper, RedissonClient redissonClient, TestAsync testAsync) {
         this.testMapper = testMapper;
         this.redissonClient = redissonClient;
         this.testAsync = testAsync;
-        //this.rabbitTemplate = rabbitTemplate;
-        //this.directExchange = directExchange;
-        //this.fanoutExchange = fanoutExchange;
-        //this.connectionFactory = connectionFactory;
-        //this.cache = cache;
     }
 
     @Override
@@ -117,21 +106,9 @@ public class TestServiceImpl implements ITestService {
         return "更新数据库查询结果：狂操霍雨佳，操的她只喊爽我还要".concat(key);
     }
 
-
-    //private Connection conn_publisher;
-    //private Channel channel;
-
-
-    @Override
-    public String rabbitMQT() throws TestServiceException {
-        //rabbitTemplate.convertAndSend(directExchange.getName(),"t", cache);
-        return null;
-    }
-
     @Override
     public String redissonTopicT() throws TestServiceException {
-
-        RTopic<Object> rTopic = redissonClient.getTopic("redissonTopic");
+        RTopic<Object> rTopic = redissonClient.getTopic("redissonCacheTopic");
         rTopic.publish("远程狂操霍雨佳的小逼");
         return null;
     }

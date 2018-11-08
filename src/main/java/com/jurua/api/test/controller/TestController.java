@@ -128,7 +128,6 @@ public class TestController {
     public ResultApi cacheData1(@PathVariable String key) throws Exception {
         ResultApi<String> resultApi = new ResultApi<>();
         try {
-            //resultApi.setData(iTestService.findData(key));
             resultApi.setData(iTestService.findDataAnnotation1(key));
             return resultApi;
         } catch (Exception e) {
@@ -137,28 +136,11 @@ public class TestController {
         }
     }
 
-    //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
-    //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
-    //@RequestMapping(value = "/getCacheData/{p}", method = RequestMethod.GET)
-    //@ResponseBody
-    //public String getCacheData(@PathVariable String p) {
-    //    return iTestService.getCacheData(p);
-    //}
-
-    //@ApiOperation(value = "测试缓存取出", notes = "测试缓存取出")
-    //@ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
-    //@RequestMapping(value = "/getAllCacheData", method = RequestMethod.GET)
-    //@ResponseBody
-    //public String getAllCacheData() {
-    //    return iTestService.getAllCacheData();
-    //}
-
     @ApiOperation(value = "测试缓存删除", notes = "测试缓存删除")
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
     @RequestMapping(value = "/delCacheData/{key}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delCacheData(@PathVariable String key) throws Exception {
-        //return iTestService.delData(key);
         return iTestService.delDataAnnotation(key);
     }
 
@@ -167,16 +149,7 @@ public class TestController {
     @RequestMapping(value = "/updateCacheData/{key}", method = RequestMethod.PUT)
     @ResponseBody
     public String updateCacheData(@PathVariable String key) throws Exception {
-        //return iTestService.updateData(key);
         return iTestService.updateDataAnnotation(key);
-    }
-
-    @ApiOperation(value = "测试 rabbitmq", notes = "测试 rabbitmq")
-    @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "成功返回，一个ResultApi", response = ResultApi.class)
-    @RequestMapping(value = "/rabbitMQT", method = RequestMethod.POST)
-    @ResponseBody
-    public String rabbitMQT() throws Exception {
-        return iTestService.rabbitMQT();
     }
 
     @ApiOperation(value = "测试 redissonTopic", notes = "测试 redissonTopic")
@@ -194,5 +167,4 @@ public class TestController {
     public void tAsync() throws Exception {
         iTestService.tAsync();
     }
-
 }
