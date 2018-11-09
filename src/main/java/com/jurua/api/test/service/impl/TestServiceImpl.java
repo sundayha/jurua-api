@@ -114,11 +114,13 @@ public class TestServiceImpl implements ITestService {
     }
 
     @Override
-    public void tAsync() {
+    public String tAsync() {
         IntStream.range(0, 100).forEach(
                 i -> {
                     testAsync.go(i);
                 }
         );
+
+        return "啪啪啪啪";
     }
 }

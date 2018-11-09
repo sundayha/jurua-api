@@ -164,7 +164,7 @@ public class TestController {
     @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "无返回值")
     @RequestMapping(value = "/tAsync", method = RequestMethod.POST)
     @ResponseBody
-    public void tAsync() throws Exception {
-        iTestService.tAsync();
+    public String tAsync() throws Exception {
+        return iTestService.tAsync();
     }
 }

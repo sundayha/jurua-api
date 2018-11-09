@@ -3,6 +3,7 @@ package com.jurua.api.config.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jurua.api.common.constants.StatusCode;
 import com.jurua.api.common.model.result.ResultApi;
+import com.jurua.api.common.utils.logger.LogUtils;
 import com.jurua.api.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -117,7 +118,7 @@ public class JwtTokenUtil {
             //redisTemplate.opsForValue().set(uuid, user, serverSessionTimeout, TimeUnit.MINUTES);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.error("生成jwt token串异常", e);
             return false;
         }
     }

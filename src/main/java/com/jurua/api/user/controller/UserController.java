@@ -3,6 +3,7 @@ package com.jurua.api.user.controller;
 import com.jurua.api.common.constants.StatusCode;
 import com.jurua.api.common.model.result.ResultApi;
 import com.jurua.api.common.utils.encoder.EncoderPwUtil;
+import com.jurua.api.common.utils.logger.LogUtils;
 import com.jurua.api.config.jwt.JwtTokenUtil;
 import com.jurua.api.user.model.User;
 import com.jurua.api.user.model.query.UserLoginQ;
@@ -74,7 +75,7 @@ public class UserController {
             jwtTokenUtil.generateToken(new HashMap<>(0), UUID.randomUUID().toString(), user, httpServletRequest, httpServletResponse);
             return new ResultApi();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.error("登陆异常", e);
             throw e;
         }
     }

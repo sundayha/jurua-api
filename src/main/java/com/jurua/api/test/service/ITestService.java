@@ -74,5 +74,5 @@ public interface ITestService {
      */
     String redissonTopicT() throws TestServiceException;
 
-    void tAsync();
+    String tAsync();
 }

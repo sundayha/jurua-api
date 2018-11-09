@@ -1,5 +1,6 @@
 package com.jurua.api.user.service.impl;
 
+import com.jurua.api.common.utils.logger.LogUtils;
 import com.jurua.api.config.exception.service.UserServiceException;
 import com.jurua.api.user.mapper.UserMapper;
 import com.jurua.api.user.model.User;
@@ -14,6 +15,8 @@ import java.util.List;
  */
 @Service
 public class UserImpl implements IUser {
+
+    //private Logger logger = Logger.getLogger(UserImpl.class);
 
     private UserMapper userMapper;
 
@@ -36,7 +39,7 @@ public class UserImpl implements IUser {
         try {
             return userMapper.findUserByPhoneNum(phoneNum);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.error("根据电话号得到user对象异常", e);
             throw new UserServiceException("根据电话号得到user对象异常", e);
         }
     }
